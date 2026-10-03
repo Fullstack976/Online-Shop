@@ -34,7 +34,15 @@ if (existing) {
   console.log(`${email} already has an account — skipping the invite email.`);
 } else {
   const { error } = await db.auth.admin.inviteUserByEmail(email, { redirectTo: `${adminSite}/auth/set-password` });
-  if (error) throw new Error(`Invite failed: ${error.message}`);
+  if (error) {
+    console.error(`✗ Invite failed: ${error.message}`);
+    console.error(
+      "  Check the address is real. Supabase's built-in email service only delivers to members of your\n" +
+        "  Supabase organization — add them under Organization → Team, or set up custom SMTP\n" +
+        "  (Authentication → Emails → SMTP Settings) to invite anyone.",
+    );
+    process.exit(1);
+  }
   console.log(`✓ Invite email sent to ${email} (link opens ${adminSite}/auth/set-password).`);
 }
 
