@@ -12,7 +12,7 @@ export function CartView() {
   const { items, hydrated, setQuantity, remove } = useCart();
 
   if (!hydrated) {
-    return <div className="h-64 animate-pulse rounded-xl bg-cloud" aria-label="Loading cart" />;
+    return <div className="h-64 animate-pulse rounded-xl bg-cloud" aria-label="Сагс ачаалж байна" />;
   }
 
   if (!items.length) {
@@ -21,10 +21,10 @@ export function CartView() {
         <span className="mx-auto grid size-20 place-items-center rounded-full bg-cloud">
           <ShoppingBag className="size-9 text-navy" strokeWidth={1.4} aria-hidden />
         </span>
-        <h2 className="mt-6 font-display text-2xl font-extrabold text-navy">Your cart is empty</h2>
-        <p className="mt-2 text-sm text-muted">Looks like you haven&apos;t added anything yet. Let&apos;s fix that!</p>
+        <h2 className="mt-6 font-display text-2xl font-extrabold text-navy">Таны сагс хоосон байна</h2>
+        <p className="mt-2 text-sm text-muted">Та одоохондоо юу ч нэмээгүй байна. Дэлгүүр хэсгээс сонголтоо хийгээрэй!</p>
         <Link href="/shop" className="label-caps mt-6 inline-flex h-12 items-center gap-2 rounded-md bg-navy px-6 text-white hover:bg-navy-700">
-          Start shopping <ArrowRight className="size-4" aria-hidden />
+          Худалдан авалт эхлэх <ArrowRight className="size-4" aria-hidden />
         </Link>
       </div>
     );
@@ -46,7 +46,7 @@ export function CartView() {
                   </Link>
                   <p className="font-display font-bold tabular-nums">{formatPrice(item.price * item.quantity)}</p>
                 </div>
-                <p className="mt-1 text-xs text-muted">{formatPrice(item.price)} each</p>
+                <p className="mt-1 text-xs text-muted">{formatPrice(item.price)} / ширхэг</p>
                 <div className="mt-auto flex items-center justify-between pt-3">
                   <QuantityInput size="sm" value={item.quantity} max={item.stock} onChange={(n) => setQuantity(item.productId, n)} />
                   <button
@@ -54,7 +54,7 @@ export function CartView() {
                     onClick={() => remove(item.productId)}
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted hover:text-red-600"
                   >
-                    <Trash2 className="size-4" aria-hidden /> Remove
+                    <Trash2 className="size-4" aria-hidden /> Хасах
                   </button>
                 </div>
               </div>
@@ -62,7 +62,7 @@ export function CartView() {
           ))}
         </ul>
         <Link href="/shop" className="label-caps mt-5 inline-flex items-center gap-2 text-[11px] text-navy hover:text-tan">
-          <ArrowLeft className="size-4" aria-hidden /> Continue shopping
+          <ArrowLeft className="size-4" aria-hidden /> Дэлгүүр рүү буцах
         </Link>
       </div>
       <div className="lg:sticky lg:top-24 lg:self-start">
@@ -71,7 +71,7 @@ export function CartView() {
             href="/checkout"
             className="label-caps mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-navy text-white transition hover:bg-navy-700"
           >
-            Proceed to checkout <ArrowRight className="size-4" aria-hidden />
+            Захиалга хийх <ArrowRight className="size-4" aria-hidden />
           </Link>
         </OrderSummary>
       </div>

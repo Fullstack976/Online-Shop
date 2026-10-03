@@ -41,14 +41,14 @@ export function AddToCartButton({ product, quantity = 1, variant = "outline", cl
       )}
     >
       {soldOut ? (
-        "Out of stock"
+        "Дууссан"
       ) : added ? (
         <>
-          <Check className="size-4" aria-hidden /> Added
+          <Check className="size-4" aria-hidden /> Нэмэгдлээ
         </>
       ) : (
         <>
-          <ShoppingCart className="size-4" aria-hidden /> Add to cart
+          <ShoppingCart className="size-4" aria-hidden /> Сагсанд нэмэх
         </>
       )}
     </button>

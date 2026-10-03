@@ -11,11 +11,11 @@ import { cn } from "@/lib/cn";
 import { OrderSummary } from "./OrderSummary";
 
 const fields = [
-  { name: "name", label: "Full name", autoComplete: "name", type: "text", span: true },
-  { name: "email", label: "Email", autoComplete: "email", type: "email" },
-  { name: "phone", label: "Phone (optional)", autoComplete: "tel", type: "tel" },
-  { name: "address", label: "Street address", autoComplete: "street-address", type: "text", span: true },
-  { name: "city", label: "City", autoComplete: "address-level2", type: "text", span: true },
+  { name: "name", label: "Овог нэр", autoComplete: "name", type: "text", span: true },
+  { name: "email", label: "Имэйл", autoComplete: "email", type: "email" },
+  { name: "phone", label: "Утас (заавал биш)", autoComplete: "tel", type: "tel" },
+  { name: "address", label: "Хаяг (дүүрэг, хороо, байр, тоот)", autoComplete: "street-address", type: "text", span: true },
+  { name: "city", label: "Хот / аймаг", autoComplete: "address-level2", type: "text", span: true },
 ] as const;
 
 export function CheckoutForm() {
@@ -27,9 +27,9 @@ export function CheckoutForm() {
   if (!items.length) {
     return (
       <div className="py-16 text-center">
-        <p className="font-display text-xl font-bold text-navy">Your cart is empty</p>
+        <p className="font-display text-xl font-bold text-navy">Таны сагс хоосон байна</p>
         <Link href="/shop" className="label-caps mt-5 inline-flex h-11 items-center rounded-md bg-navy px-5 text-white">
-          Continue shopping
+          Дэлгүүр рүү буцах
         </Link>
       </div>
     );
@@ -40,7 +40,7 @@ export function CheckoutForm() {
       <input type="hidden" name="items" value={JSON.stringify(items.map((i) => ({ productId: i.productId, quantity: i.quantity })))} />
       <div className="space-y-8">
         <section className="rounded-xl border border-line p-6">
-          <h2 className="font-display text-base font-extrabold uppercase tracking-wide text-navy">Shipping details</h2>
+          <h2 className="font-display text-base font-extrabold uppercase tracking-wide text-navy">Хүргэлтийн мэдээлэл</h2>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {fields.map((f) => {
               const error = state.fieldErrors?.[f.name];
@@ -74,18 +74,18 @@ export function CheckoutForm() {
         </section>
 
         <section className="rounded-xl border border-line p-6">
-          <h2 className="font-display text-base font-extrabold uppercase tracking-wide text-navy">Payment</h2>
+          <h2 className="font-display text-base font-extrabold uppercase tracking-wide text-navy">Төлбөр</h2>
           <div className="mt-5 grid gap-3">
             <label className="flex cursor-pointer items-center gap-3 rounded-lg border-2 border-navy p-4">
               <input type="radio" name="payment" value="cod" defaultChecked className="accent-navy" />
               <Banknote className="size-5 text-navy" aria-hidden />
-              <span className="text-sm font-semibold">Cash on delivery</span>
+              <span className="text-sm font-semibold">Хүргэлтээр бэлнээр төлөх</span>
             </label>
             <label className="flex cursor-not-allowed items-center gap-3 rounded-lg border border-line p-4 opacity-60">
               <input type="radio" name="payment" value="card" disabled />
               <CreditCard className="size-5 text-navy" aria-hidden />
-              <span className="text-sm font-semibold">Card payment</span>
-              <span className="ml-auto rounded-full bg-cloud px-2 py-0.5 text-[10px] font-bold uppercase text-muted">Coming soon</span>
+              <span className="text-sm font-semibold">Картаар төлөх</span>
+              <span className="ml-auto rounded-full bg-cloud px-2 py-0.5 text-[10px] font-bold uppercase text-muted">Тун удахгүй</span>
             </label>
           </div>
         </section>
@@ -117,9 +117,9 @@ export function CheckoutForm() {
             disabled={pending}
             className="label-caps mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-navy text-white transition hover:bg-navy-700 disabled:opacity-60"
           >
-            <Lock className="size-4" aria-hidden /> {pending ? "Placing order…" : "Place order"}
+            <Lock className="size-4" aria-hidden /> {pending ? "Захиалж байна…" : "Захиалга өгөх"}
           </button>
-          <p className="mt-3 text-center text-xs text-muted">Prices are confirmed on our server when you place the order.</p>
+          <p className="mt-3 text-center text-xs text-muted">Үнийг захиалга өгөх үед манай сервер дээр дахин баталгаажуулна.</p>
         </OrderSummary>
       </div>
     </form>

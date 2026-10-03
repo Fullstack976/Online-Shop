@@ -9,7 +9,8 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "db:seed-sql": "node packages/db/scripts/generate-seed.ts > supabase/seed.sql",
-    "db:seed": "node --env-file=.env packages/db/scripts/seed-supabase.ts"
+    "db:seed": "node --env-file=.env packages/db/scripts/seed-supabase.ts",
+    "db:invite-admin": "node --env-file=.env packages/db/scripts/invite-admin.ts"
   },
   "devDependencies": {
     "turbo": "^2.11.6"

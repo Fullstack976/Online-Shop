@@ -5,7 +5,7 @@ export function StarRating({ rating, count, size = "sm" }: { rating: number; cou
   const icon = size === "sm" ? "size-3.5" : "size-4.5";
   return (
     <div className="flex items-center gap-1.5">
-      <div className="flex items-center" role="img" aria-label={`Rated ${rating.toFixed(1)} out of 5`}>
+      <div className="flex items-center" role="img" aria-label={`5-аас ${rating.toFixed(1)} үнэлгээ`}>
         {Array.from({ length: 5 }, (_, i) => {
           const fill = Math.max(0, Math.min(1, rating - i));
           return (

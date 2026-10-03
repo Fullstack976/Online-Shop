@@ -33,18 +33,18 @@ export function HeaderActions() {
         type="button"
         onClick={() => setSearchOpen(true)}
         className="grid size-10 place-items-center rounded-full text-navy transition hover:bg-cloud"
-        aria-label="Search products"
+        aria-label="Бараа хайх"
       >
         <Search className="size-5" strokeWidth={1.8} />
       </button>
       <Link
         href="/account"
         className="hidden size-10 place-items-center rounded-full text-navy transition hover:bg-cloud sm:grid"
-        aria-label="My account"
+        aria-label="Миний бүртгэл"
       >
         <User className="size-5" strokeWidth={1.8} />
       </Link>
-      <Link href="/cart" className="flex items-center gap-2 rounded-full py-1 pl-1 pr-1 text-navy transition hover:bg-cloud sm:pr-3" aria-label={`Cart, ${count} items`}>
+      <Link href="/cart" className="flex items-center gap-2 rounded-full py-1 pl-1 pr-1 text-navy transition hover:bg-cloud sm:pr-3" aria-label={`Сагс, ${count} бараа`}>
         <span className="relative grid size-9 place-items-center">
           <ShoppingCart className="size-5" strokeWidth={1.8} />
           <span className="absolute -right-0.5 -top-0.5 grid min-w-[18px] place-items-center rounded-full bg-navy px-1 text-[10px] font-bold leading-[18px] text-white">
@@ -66,18 +66,18 @@ export function HeaderActions() {
             <input
               ref={inputRef}
               name="q"
-              placeholder="Search for products, brands and more…"
+              placeholder="Бараа, брэнд болон бусдыг хайх…"
               className="h-11 min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-muted"
               onKeyDown={(e) => e.key === "Escape" && setSearchOpen(false)}
             />
             <button type="submit" className="label-caps h-11 rounded-md bg-navy px-5 text-white hover:bg-navy-700">
-              Search
+              Хайх
             </button>
             <button
               type="button"
               onClick={() => setSearchOpen(false)}
               className="grid size-10 place-items-center rounded-full text-muted hover:bg-cloud"
-              aria-label="Close search"
+              aria-label="Хайлт хаах"
             >
               <X className="size-5" />
             </button>

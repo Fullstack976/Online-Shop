@@ -13,7 +13,7 @@ export function NavLinks({ categories }: { categories: NavItem[] }) {
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
-    <nav aria-label="Main" className="mx-auto hidden lg:block">
+    <nav aria-label="Үндсэн цэс" className="mx-auto hidden lg:block">
       <ul className="flex items-center gap-8">
         {mainNav.map((item) => {
           const menu = item.menu === "categories" ? categories : item.menu === "collections" ? collections : null;
@@ -46,7 +46,7 @@ export function NavLinks({ categories }: { categories: NavItem[] }) {
                       href="/shop"
                       className="mt-1 block rounded-md border-t border-line px-3 pb-2 pt-3 text-sm font-semibold text-navy hover:text-tan"
                     >
-                      View all products →
+                      Бүх бараа →
                     </Link>
                   )}
                 </div>

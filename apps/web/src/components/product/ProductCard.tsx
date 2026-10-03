@@ -30,7 +30,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         )}
         {product.stock > 0 && product.stock <= 5 && (
           <span className="absolute bottom-2.5 left-2.5 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold text-red-600">
-            Only {product.stock} left
+            Ердөө {product.stock} үлдсэн
           </span>
         )}
       </Link>

@@ -5,33 +5,33 @@ import { Logo } from "./Logo";
 
 const columns = [
   {
-    title: "Quick Links",
+    title: "Холбоосууд",
     links: [
-      { label: "Home", href: "/" },
-      { label: "Shop", href: "/shop" },
-      { label: "Collections", href: "/collections" },
-      { label: "About Us", href: "/about" },
-      { label: "Contact Us", href: "/contact" },
+      { label: "Нүүр", href: "/" },
+      { label: "Дэлгүүр", href: "/shop" },
+      { label: "Цуглуулга", href: "/collections" },
+      { label: "Бидний тухай", href: "/about" },
+      { label: "Холбоо барих", href: "/contact" },
     ],
   },
   {
-    title: "Customer Service",
+    title: "Үйлчилгээ",
     links: [
-      { label: "FAQs", href: "/contact#faq" },
-      { label: "Shipping Policy", href: "/contact#faq" },
-      { label: "Returns & Refunds", href: "/contact#faq" },
-      { label: "Terms & Conditions", href: "/about" },
-      { label: "Privacy Policy", href: "/about" },
+      { label: "Түгээмэл асуулт", href: "/contact#faq" },
+      { label: "Хүргэлтийн нөхцөл", href: "/contact#faq" },
+      { label: "Буцаалт ба мөнгө буцаах", href: "/contact#faq" },
+      { label: "Үйлчилгээний нөхцөл", href: "/about" },
+      { label: "Нууцлалын бодлого", href: "/about" },
     ],
   },
   {
-    title: "My Account",
+    title: "Миний бүртгэл",
     links: [
-      { label: "My Account", href: "/account" },
-      { label: "Order History", href: "/account" },
-      { label: "Shopping Cart", href: "/cart" },
-      { label: "Checkout", href: "/checkout" },
-      { label: "Login / Register", href: "/account" },
+      { label: "Миний бүртгэл", href: "/account" },
+      { label: "Захиалгын түүх", href: "/account" },
+      { label: "Сагс", href: "/cart" },
+      { label: "Захиалга хийх", href: "/checkout" },
+      { label: "Нэвтрэх / Бүртгүүлэх", href: "/account" },
     ],
   },
 ];
@@ -61,7 +61,7 @@ export function Footer() {
           </div>
         ))}
         <div>
-          <h3 className="label-caps text-white">Contact Us</h3>
+          <h3 className="label-caps text-white">Холбоо барих</h3>
           <ul className="mt-4 space-y-3 text-sm text-white/65">
             <li className="flex gap-3">
               <Phone className="mt-0.5 size-4 shrink-0 text-tan" aria-hidden />
@@ -88,8 +88,8 @@ export function Footer() {
       </div>
       <div className="border-t border-white/10">
         <div className="container-page flex flex-col items-center justify-between gap-4 py-5 text-xs text-white/55 sm:flex-row">
-          <p>© {new Date().getFullYear()} {site.name}. All Rights Reserved.</p>
-          <ul className="flex flex-wrap items-center justify-center gap-2" aria-label="Accepted payment methods">
+          <p>© {new Date().getFullYear()} {site.name}. Бүх эрх хуулиар хамгаалагдсан.</p>
+          <ul className="flex flex-wrap items-center justify-center gap-2" aria-label="Хүлээн авах төлбөрийн хэрэгсэл">
             {payments.map((p) => (
               <li key={p} className="rounded bg-white px-2 py-1 font-display text-[10px] font-extrabold italic tracking-wide text-navy">
                 {p}

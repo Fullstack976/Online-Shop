@@ -21,7 +21,7 @@ export function ProductGallery({ images, name, badge }: { images: string[]; name
                 "relative size-20 shrink-0 overflow-hidden rounded-lg border-2 bg-cloud transition",
                 i === active ? "border-navy" : "border-transparent opacity-70 hover:opacity-100",
               )}
-              aria-label={`Show image ${i + 1}`}
+              aria-label={`${i + 1}-р зургийг харах`}
               aria-current={i === active}
             >
               <Image src={src} alt="" fill sizes="80px" className="object-cover" />

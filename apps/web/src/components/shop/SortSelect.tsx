@@ -3,11 +3,11 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const options = [
-  { value: "featured", label: "Featured" },
-  { value: "newest", label: "Newest" },
-  { value: "price-asc", label: "Price: Low to High" },
-  { value: "price-desc", label: "Price: High to Low" },
-  { value: "rating", label: "Top Rated" },
+  { value: "featured", label: "Онцлох" },
+  { value: "newest", label: "Шинэ нь эхэндээ" },
+  { value: "price-asc", label: "Үнэ: багаас их" },
+  { value: "price-desc", label: "Үнэ: ихээс бага" },
+  { value: "rating", label: "Өндөр үнэлгээтэй" },
 ];
 
 export function SortSelect() {
@@ -17,7 +17,7 @@ export function SortSelect() {
 
   return (
     <label className="flex items-center gap-2 text-sm">
-      <span className="text-muted">Sort by</span>
+      <span className="text-muted">Эрэмбэлэх</span>
       <select
         value={params.get("sort") ?? "featured"}
         onChange={(e) => {

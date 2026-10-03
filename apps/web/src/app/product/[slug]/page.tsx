@@ -21,7 +21,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/product/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const product = await getData().getProductBySlug(slug);
-  if (!product) return { title: "Product not found" };
+  if (!product) return { title: "Бараа олдсонгүй" };
   return {
     title: product.name,
     description: product.description,
@@ -43,10 +43,10 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
   return (
     <>
       <div className="container-page py-8 lg:py-12">
-        <nav aria-label="Breadcrumb" className="mb-6 text-xs text-muted">
-          <Link href="/" className="hover:text-tan">Home</Link>
+        <nav aria-label="Замын заалт" className="mb-6 text-xs text-muted">
+          <Link href="/" className="hover:text-tan">Нүүр</Link>
           <span className="mx-1.5">/</span>
-          <Link href="/shop" className="hover:text-tan">Shop</Link>
+          <Link href="/shop" className="hover:text-tan">Дэлгүүр</Link>
           {product.category && (
             <>
               <span className="mx-1.5">/</span>
@@ -68,14 +68,14 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
             <div className="mt-3 flex items-center gap-3">
               <StarRating rating={product.rating} size="md" />
               <span className="text-sm text-muted">
-                {product.rating.toFixed(1)} · {product.reviewCount} reviews
+                {product.rating.toFixed(1)} · {product.reviewCount} үнэлгээ
               </span>
             </div>
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Price price={product.price} compareAtPrice={product.compareAtPrice} size="lg" />
               {discount && product.compareAtPrice && (
                 <span className="rounded-full bg-tan-100 px-3 py-1 text-xs font-bold text-tan-600">
-                  You save {formatPrice(product.compareAtPrice - product.price)}
+                  {formatPrice(product.compareAtPrice - product.price)} хэмнэнэ
                 </span>
               )}
             </div>
@@ -83,7 +83,7 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
 
             <p className="mt-6 flex items-center gap-2 text-sm">
               <span className={`size-2 rounded-full ${product.stock > 10 ? "bg-emerald-500" : product.stock > 0 ? "bg-amber-500" : "bg-red-500"}`} />
-              {product.stock > 10 ? "In stock, ready to ship" : product.stock > 0 ? `Hurry — only ${product.stock} left` : "Out of stock"}
+              {product.stock > 10 ? "Бэлэн байгаа, шууд илгээнэ" : product.stock > 0 ? `Яараарай — ердөө ${product.stock} үлдсэн` : "Дууссан"}
             </p>
 
             <div className="mt-6">
@@ -101,10 +101,10 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
 
             <ul className="mt-8 grid gap-4 rounded-xl bg-cloud p-5 sm:grid-cols-2">
               {[
-                { icon: Truck, title: "Free shipping", text: "On orders over $50" },
-                { icon: RotateCcw, title: "Easy returns", text: "30-day return policy" },
-                { icon: CreditCard, title: "Secure payment", text: "100% secure checkout" },
-                { icon: PackageCheck, title: "Quality checked", text: "Handpicked products" },
+                { icon: Truck, title: "Үнэгүй хүргэлт", text: "$50-аас дээш захиалгад" },
+                { icon: RotateCcw, title: "Хялбар буцаалт", text: "30 хоногийн дотор" },
+                { icon: CreditCard, title: "Аюулгүй төлбөр", text: "100% найдвартай" },
+                { icon: PackageCheck, title: "Чанар баталгаатай", text: "Шилж авсан бараа" },
               ].map(({ icon: Icon, title, text }) => (
                 <li key={title} className="flex items-center gap-3">
                   <Icon className="size-5 shrink-0 text-navy" strokeWidth={1.6} aria-hidden />
@@ -121,7 +121,7 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
 
       {related.length > 0 && (
         <section className="container-page pb-16">
-          <SectionHeading title="You may also like" href={`/shop?category=${product.category?.slug}`} />
+          <SectionHeading title="Танд таалагдаж магадгүй" href={`/shop?category=${product.category?.slug}`} />
           <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-5">
             {related.map((p) => (
               <ProductCard key={p.id} product={p} />

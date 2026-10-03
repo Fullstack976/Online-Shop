@@ -23,12 +23,12 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   return (
     <article className="container-page max-w-3xl py-12">
       <Link href="/blog" className="label-caps inline-flex items-center gap-2 text-[11px] text-navy hover:text-tan">
-        <ArrowLeft className="size-4" aria-hidden /> All posts
+        <ArrowLeft className="size-4" aria-hidden /> Бүх нийтлэл
       </Link>
       <p className="label-caps mt-8 text-tan">{post.category}</p>
       <h1 className="mt-3 font-display text-3xl font-extrabold leading-tight text-navy sm:text-4xl">{post.title}</h1>
       <p className="mt-3 text-sm text-muted">
-        {formatPostDate(post.date)} · {post.readMinutes} min read
+        {formatPostDate(post.date)} · {post.readMinutes} мин унших
       </p>
       <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-2xl">
         <Image src={post.image} alt="" fill priority sizes="(min-width: 768px) 768px, 100vw" className="object-cover" />
@@ -40,7 +40,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
         ))}
       </div>
       <Link href="/shop" className="label-caps mt-10 inline-flex h-12 items-center rounded-md bg-navy px-6 text-white hover:bg-navy-700">
-        Shop the story
+        Холбогдох бараа үзэх
       </Link>
     </article>
   );

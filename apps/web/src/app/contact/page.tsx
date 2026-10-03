@@ -4,25 +4,25 @@ import { ContactForm } from "@/components/ui/ContactForm";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Contact Us" };
+export const metadata: Metadata = { title: "Холбоо барих" };
 
 const faqs = [
-  { q: "How long does shipping take?", a: "Orders ship within 24 hours and usually arrive in 2–4 business days. Shipping is free on orders over $50." },
-  { q: "What is your return policy?", a: "Changed your mind? Return any unused item within 30 days for a full refund." },
-  { q: "Which payment methods do you accept?", a: "Cash on delivery today; card payments are coming soon." },
-  { q: "How can I track my order?", a: "You'll receive an email with tracking details as soon as your order ships." },
+  { q: "Хүргэлт хэр удах вэ?", a: "Захиалгыг 24 цагийн дотор илгээж, ихэвчлэн 2–4 ажлын өдөрт хүргэнэ. $50-аас дээш захиалгад хүргэлт үнэгүй." },
+  { q: "Буцаалтын нөхцөл ямар вэ?", a: "Бодол өөрчлөгдсөн үү? Хэрэглээгүй барааг 30 хоногийн дотор буцааж, төлбөрөө бүрэн авах боломжтой." },
+  { q: "Ямар төлбөрийн хэрэгсэл хүлээн авдаг вэ?", a: "Одоогоор хүргэлтийн үед бэлнээр төлнө. Картаар төлөх боломж тун удахгүй нэмэгдэнэ." },
+  { q: "Захиалгаа яаж хянах вэ?", a: "Захиалга илгээгдмэгц хянах мэдээлэл бүхий имэйл танд ирнэ." },
 ];
 
 export default function ContactPage() {
   const cards = [
-    { icon: Phone, title: "Call us", text: site.phone, href: `tel:${site.phone.replace(/\s/g, "")}` },
-    { icon: Mail, title: "Email", text: site.email, href: `mailto:${site.email}` },
-    { icon: MapPin, title: "Visit", text: site.address.join(" ") },
-    { icon: Clock, title: "Hours", text: "Mon – Sun, 9:00 – 20:00" },
+    { icon: Phone, title: "Утас", text: site.phone, href: `tel:${site.phone.replace(/\s/g, "")}` },
+    { icon: Mail, title: "Имэйл", text: site.email, href: `mailto:${site.email}` },
+    { icon: MapPin, title: "Хаяг", text: site.address.join(" ") },
+    { icon: Clock, title: "Цагийн хуваарь", text: "Даваа – Ням, 9:00 – 20:00" },
   ];
   return (
     <>
-      <PageHeader title="Contact us" crumbs={[{ label: "Contact Us" }]} subtitle="Questions about an order or a product? We're here to help." />
+      <PageHeader title="Холбоо барих" crumbs={[{ label: "Холбоо барих" }]} subtitle="Захиалга эсвэл барааны талаар асуух зүйл байна уу? Бид туслахад бэлэн." />
       <div className="container-page grid gap-10 py-12 lg:grid-cols-[1fr_1.3fr]">
         <div className="grid content-start gap-4 sm:grid-cols-2 lg:grid-cols-1">
           {cards.map(({ icon: Icon, title, text, href }) => (
@@ -44,13 +44,13 @@ export default function ContactPage() {
           ))}
         </div>
         <div className="rounded-2xl border border-line p-6 sm:p-8">
-          <h2 className="font-display text-xl font-extrabold text-navy">Send us a message</h2>
-          <p className="mb-6 mt-1 text-sm text-muted">We usually reply within a few hours.</p>
+          <h2 className="font-display text-xl font-extrabold text-navy">Бидэнд бичих</h2>
+          <p className="mb-6 mt-1 text-sm text-muted">Бид ихэвчлэн хэдхэн цагийн дотор хариулдаг.</p>
           <ContactForm />
         </div>
       </div>
       <section id="faq" className="container-page max-w-3xl scroll-mt-28 pb-16">
-        <h2 className="text-center font-display text-lg font-extrabold uppercase tracking-wide text-navy">Frequently asked questions</h2>
+        <h2 className="text-center font-display text-lg font-extrabold uppercase tracking-wide text-navy">Түгээмэл асуултууд</h2>
         <div className="mt-6 divide-y divide-line rounded-xl border border-line">
           {faqs.map((f) => (
             <details key={f.q} className="group p-5">

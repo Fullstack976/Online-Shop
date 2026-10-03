@@ -10,14 +10,14 @@ export function NewsletterForm() {
     <form action={action} className="mt-3">
       <div className="flex overflow-hidden rounded-md border border-line focus-within:border-navy">
         <label htmlFor="newsletter-email" className="sr-only">
-          Email address
+          Имэйл хаяг
         </label>
         <input
           id="newsletter-email"
           name="email"
           type="email"
           required
-          placeholder="Enter your email"
+          placeholder="Имэйл хаягаа оруулна уу"
           className="h-11 min-w-0 flex-1 px-4 text-sm outline-none placeholder:text-muted"
         />
         <button
@@ -25,7 +25,7 @@ export function NewsletterForm() {
           disabled={pending}
           className="label-caps shrink-0 bg-navy px-5 text-[11px] text-white transition hover:bg-navy-700 disabled:opacity-60"
         >
-          {pending ? "…" : "Subscribe"}
+          {pending ? "…" : "Бүртгүүлэх"}
         </button>
       </div>
       {state.status !== "idle" && (

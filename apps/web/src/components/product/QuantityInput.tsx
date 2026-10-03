@@ -21,7 +21,7 @@ export function QuantityInput({
         onClick={() => onChange(Math.max(1, value - 1))}
         disabled={value <= 1}
         className="grid h-full w-9 place-items-center text-navy disabled:text-line"
-        aria-label="Decrease quantity"
+        aria-label="Тоо ширхэг хасах"
       >
         <Minus className="size-4" />
       </button>
@@ -33,7 +33,7 @@ export function QuantityInput({
         onClick={() => onChange(Math.min(max, value + 1))}
         disabled={value >= max}
         className="grid h-full w-9 place-items-center text-navy disabled:text-line"
-        aria-label="Increase quantity"
+        aria-label="Тоо ширхэг нэмэх"
       >
         <Plus className="size-4" />
       </button>

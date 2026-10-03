@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/ui/PageHeader";
 import { getData } from "@/lib/data";
 import { collections } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Collections" };
+export const metadata: Metadata = { title: "Цуглуулга" };
 export const revalidate = 60;
 
 export default async function CollectionsPage() {
@@ -20,9 +20,9 @@ export default async function CollectionsPage() {
   return (
     <>
       <PageHeader
-        title="Collections"
-        crumbs={[{ label: "Collections" }]}
-        subtitle="Browse every department, or jump straight into one of our curated edits."
+        title="Цуглуулга"
+        crumbs={[{ label: "Цуглуулга" }]}
+        subtitle="Бүх ангиллыг үзэх эсвэл бидний шилж бэлдсэн цуглуулгуудаас сонгоорой."
       />
       <div className="container-page py-10">
         <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
@@ -60,7 +60,7 @@ export default async function CollectionsPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/20 to-transparent" />
                 <div className="relative flex w-full items-end justify-between gap-4 p-6 text-white">
                   <div>
-                    <p className="label-caps text-tan">{count(c.id)} products</p>
+                    <p className="label-caps text-tan">{count(c.id)} бараа</p>
                     <h2 className="mt-1 font-display text-2xl font-extrabold uppercase">{c.name}</h2>
                   </div>
                   <span className="grid size-11 shrink-0 place-items-center rounded-full bg-white text-navy transition group-hover:bg-tan group-hover:text-white">

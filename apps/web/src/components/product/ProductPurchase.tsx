@@ -28,7 +28,7 @@ export function ProductPurchase({ product }: { product: Omit<CartItem, "quantity
           }}
           className="label-caps inline-flex h-12 w-full items-center justify-center gap-2 rounded-md bg-tan text-xs text-white transition hover:bg-tan-600"
         >
-          <Zap className="size-4" aria-hidden /> Buy it now
+          <Zap className="size-4" aria-hidden /> Шууд худалдан авах
         </button>
       )}
     </div>

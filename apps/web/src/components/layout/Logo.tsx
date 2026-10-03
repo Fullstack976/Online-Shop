@@ -5,7 +5,7 @@ import { site } from "@/lib/site";
 
 export function Logo({ inverted = false, className }: { inverted?: boolean; className?: string }) {
   return (
-    <Link href="/" className={cn("flex items-center gap-2", className)} aria-label={`${site.name} home`}>
+    <Link href="/" className={cn("flex items-center gap-2", className)} aria-label={`${site.name} нүүр хуудас`}>
       <span
         className={cn(
           "grid size-9 place-items-center rounded-md",

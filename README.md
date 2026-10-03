@@ -50,14 +50,19 @@ npm run typecheck && npm run lint
    SUPABASE_SECRET_KEY=sb_secret_...   # Project Settings → API Keys → Secret keys
    ```
    Secret key нь RLS-ийг алгасдаг тул аппуудын `.env.local` эсвэл Vercel-д **бүү** хий, `NEXT_PUBLIC_` угтвар бүү өг.
-4. **Authentication → Users → Add user** дээр admin хэрэглэгч (email + password) үүсгэнэ.
-5. Бүх өгөгдөл, зургийг Supabase руу оруулна:
+4. Бүх өгөгдөл, зургийг Supabase руу оруулна:
    ```bash
-   npm run db:seed -- --admin таны@email.com
+   npm run db:seed
    ```
-   Энэ нь бүх зургийг (бараа, ангилал, hero, blog) Storage-ийн `product-images` bucket руу upload хийж,
-   ангилал, бараа, харилцагч, захиалгыг database-д бичээд, тухайн хэрэглэгчид admin эрх өгнө.
-   Дахин ажиллуулж болно, demo өгөгдлийг анхны төлөвт нь буцаана.
+   Бүх зургийг (бараа, ангилал, hero, blog) Storage-ийн `product-images` bucket руу upload хийж,
+   ангилал, бараа, харилцагч, захиалгыг database-д бичнэ. Дахин ажиллуулж болно — demo өгөгдлийг анхны төлөвт нь буцаана.
+5. Admin хэрэглэгч урих (root `.env`-д `ADMIN_SITE_URL=https://<admin-домэйн>` байх ёстой):
+   ```bash
+   npm run db:invite-admin -- owner@example.com
+   ```
+   Supabase урилгын имэйл илгээнэ. Линк нь admin сайтын `/auth/set-password` хуудсыг нээж, хэрэглэгч өөрийн нууц үгээ
+   тохируулна. Скрипт тухайн хэрэглэгчид admin эрх олгоно. Supabase → Authentication → URL Configuration-д admin домэйныг
+   (`https://<admin-домэйн>/**`) Redirect URL болгон нэмсэн байх шаардлагатай.
 
 Аппууд өөрсдөө зөвхөн publishable key ашиглана, бүх эрхийг RLS хянана:
 - Бараа, ангилал: хүн бүр уншина, зөвхөн admin засна.

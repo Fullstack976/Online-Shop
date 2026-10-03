@@ -4,13 +4,13 @@ import Link from "next/link";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { formatPostDate, posts } from "@/lib/posts";
 
-export const metadata: Metadata = { title: "Blog" };
+export const metadata: Metadata = { title: "Блог" };
 
 export default function BlogPage() {
   const [featured, ...rest] = posts;
   return (
     <>
-      <PageHeader title="Blog" crumbs={[{ label: "Blog" }]} subtitle="Tips, trends and inspiration from the ShopLuxe team." />
+      <PageHeader title="Блог" crumbs={[{ label: "Блог" }]} subtitle="ShopLuxe багийн зөвлөгөө, чиг хандлага, санаа." />
       <div className="container-page py-12">
         {featured && (
           <Link href={`/blog/${featured.slug}`} className="group grid overflow-hidden rounded-2xl border border-line lg:grid-cols-2">
@@ -22,7 +22,7 @@ export default function BlogPage() {
               <h2 className="mt-3 font-display text-2xl font-extrabold text-navy group-hover:text-tan sm:text-3xl">{featured.title}</h2>
               <p className="mt-3 text-ink/70">{featured.excerpt}</p>
               <p className="mt-5 text-xs text-muted">
-                {formatPostDate(featured.date)} · {featured.readMinutes} min read
+                {formatPostDate(featured.date)} · {featured.readMinutes} мин унших
               </p>
             </div>
           </Link>
@@ -38,7 +38,7 @@ export default function BlogPage() {
                 <h2 className="mt-2 font-display text-lg font-bold text-navy group-hover:text-tan">{post.title}</h2>
                 <p className="mt-2 text-sm text-ink/70">{post.excerpt}</p>
                 <p className="mt-4 text-xs text-muted">
-                  {formatPostDate(post.date)} · {post.readMinutes} min read
+                  {formatPostDate(post.date)} · {post.readMinutes} мин унших
                 </p>
               </div>
             </Link>

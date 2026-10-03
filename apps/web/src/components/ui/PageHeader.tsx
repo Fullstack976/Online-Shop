@@ -7,9 +7,9 @@ export function PageHeader({ title, crumbs, subtitle }: { title: string; crumbs:
   return (
     <section className="bg-beige">
       <div className="container-page py-10 sm:py-12">
-        <nav aria-label="Breadcrumb">
+        <nav aria-label="Замын заалт">
           <ol className="flex flex-wrap items-center gap-1.5 text-xs text-muted">
-            {[{ label: "Home", href: "/" }, ...crumbs].map((c, i, all) => (
+            {[{ label: "Нүүр", href: "/" }, ...crumbs].map((c, i, all) => (
               <li key={`${c.label}-${i}`} className="flex items-center gap-1.5">
                 {c.href && i < all.length - 1 ? (
                   <Link href={c.href} className="hover:text-tan">

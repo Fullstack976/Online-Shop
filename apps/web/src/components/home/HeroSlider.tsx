@@ -20,41 +20,41 @@ type Slide = {
 
 const slides: Slide[] = [
   {
-    eyebrow: "Welcome to ShopLuxe",
-    title: ["Everything.", "For everyone."],
-    script: "Best Quality, Best Prices!",
-    body: "Discover a wide range of top-quality products handpicked just for you.",
-    primary: { label: "Shop now", href: "/shop" },
-    secondary: { label: "Explore collections", href: "/collections" },
-    badge: { top: "Up to", big: "50%", bottom: "Off" },
+    eyebrow: "ShopLuxe-д тавтай морил",
+    title: ["Бүх зүйл.", "Хүн бүрт."],
+    script: "Шилдэг чанар, хямд үнэ!",
+    body: "Танд зориулан шилсэн чанартай олон төрлийн бараатай танилцаарай.",
+    primary: { label: "Худалдан авах", href: "/shop" },
+    secondary: { label: "Цуглуулга үзэх", href: "/collections" },
+    badge: { top: "Хүртэл", big: "50%", bottom: "Хямдрал" },
     art: "collage",
   },
   {
-    eyebrow: "New season arrivals",
-    title: ["Style that", "speaks."],
-    script: "Fresh looks, every day",
-    body: "Wardrobe essentials and statement pieces — curated for comfort and made to last.",
-    primary: { label: "Shop fashion", href: "/shop?category=fashion" },
-    secondary: { label: "New arrivals", href: "/shop?sort=newest" },
-    badge: { top: "New", big: "40+", bottom: "Styles" },
-    art: { src: siteImage("hero-fashion"), alt: "Rail of neatly hung shirts and knitwear" },
+    eyebrow: "Шинэ улирлын бараа",
+    title: ["Өөрийн", "хэв маяг."],
+    script: "Өдөр бүр шинэ төрх",
+    body: "Тав тухтай, удаан эдэлгээтэй өдөр тутмын хувцас болон онцгой загварууд.",
+    primary: { label: "Хувцас үзэх", href: "/shop?category=fashion" },
+    secondary: { label: "Шинэ бараа", href: "/shop?sort=newest" },
+    badge: { top: "Шинэ", big: "40+", bottom: "Загвар" },
+    art: { src: siteImage("hero-fashion"), alt: "Өлгүүрт эмх цэгцтэй өлгөсөн цамц, сүлжмэл хувцас" },
   },
   {
-    eyebrow: "Tech week deals",
-    title: ["Smarter.", "Every day."],
-    script: "Gadgets you'll love",
-    body: "Smart watches, earbuds, speakers and more — with free shipping on orders over $50.",
-    primary: { label: "Shop electronics", href: "/shop?category=electronics" },
-    secondary: { label: "View deals", href: "/shop?sale=1" },
-    badge: { top: "Save", big: "30%", bottom: "On tech" },
-    art: { src: siteImage("hero-tech"), alt: "Laptop, phone, headphones and camera on a desk" },
+    eyebrow: "Технологийн долоо хоног",
+    title: ["Ухаалаг.", "Өдөр бүр."],
+    script: "Таны дуртай гаджетууд",
+    body: "Ухаалаг цаг, чихэвч, чанга яригч болон бусад — $50-аас дээш захиалгад хүргэлт үнэгүй.",
+    primary: { label: "Электроник үзэх", href: "/shop?category=electronics" },
+    secondary: { label: "Хямдрал үзэх", href: "/shop?sale=1" },
+    badge: { top: "Хэмнэлт", big: "30%", bottom: "Техник" },
+    art: { src: siteImage("hero-tech"), alt: "Ширээн дээрх зөөврийн компьютер, утас, чихэвч, камер" },
   },
 ];
 
 const perks = [
-  { icon: Truck, title: "Free shipping", text: "On orders over $50" },
-  { icon: RotateCcw, title: "Easy returns", text: "30-day return policy" },
-  { icon: CreditCard, title: "Secure payment", text: "100% secure checkout" },
+  { icon: Truck, title: "Үнэгүй хүргэлт", text: "$50-аас дээш захиалгад" },
+  { icon: RotateCcw, title: "Хялбар буцаалт", text: "30 хоногийн дотор" },
+  { icon: CreditCard, title: "Аюулгүй төлбөр", text: "100% найдвартай" },
 ];
 
 function Collage() {
@@ -63,7 +63,7 @@ function Collage() {
       <div className="absolute inset-[6%_4%_4%_22%] overflow-hidden rounded-[28px] bg-white shadow-xl shadow-navy/10">
         <Image
           src={siteImage("hero-backpack")}
-          alt="Leather backpack"
+          alt="Арьсан үүргэвч"
           fill
           priority
           sizes="(min-width: 1024px) 420px, 70vw"
@@ -72,17 +72,17 @@ function Collage() {
       </div>
       <div className="absolute left-[2%] top-[10%] w-[24%] overflow-hidden rounded-2xl bg-white p-1.5 shadow-lg shadow-navy/10">
         <div className="relative aspect-[3/4] overflow-hidden rounded-xl">
-          <Image src={siteImage("hero-bottle")} alt="Insulated water bottle" fill sizes="140px" className="object-cover" />
+          <Image src={siteImage("hero-bottle")} alt="Термос усны сав" fill sizes="140px" className="object-cover" />
         </div>
       </div>
       <div className="absolute bottom-[2%] left-[6%] w-[34%] overflow-hidden rounded-2xl bg-white p-1.5 shadow-lg shadow-navy/10">
         <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-          <Image src={siteImage("hero-sneakers")} alt="Sneakers" fill sizes="200px" className="object-cover" />
+          <Image src={siteImage("hero-sneakers")} alt="Пүүз" fill sizes="200px" className="object-cover" />
         </div>
       </div>
       <div className="absolute -bottom-[3%] right-[-2%] w-[30%] overflow-hidden rounded-2xl bg-white p-1.5 shadow-lg shadow-navy/10">
         <div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-          <Image src={siteImage("hero-sunglasses")} alt="Sunglasses" fill sizes="180px" className="object-cover" />
+          <Image src={siteImage("hero-sunglasses")} alt="Нарны шил" fill sizes="180px" className="object-cover" />
         </div>
       </div>
     </div>
@@ -106,7 +106,7 @@ export function HeroSlider() {
     <section
       className="relative overflow-hidden bg-beige"
       aria-roledescription="carousel"
-      aria-label="Featured promotions"
+      aria-label="Онцлох урамшуулал"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -170,7 +170,7 @@ export function HeroSlider() {
         type="button"
         onClick={() => go(index - 1)}
         className="absolute left-2 top-1/2 hidden size-10 -translate-y-1/2 place-items-center rounded-full text-navy transition hover:bg-white/70 md:grid"
-        aria-label="Previous slide"
+        aria-label="Өмнөх слайд"
       >
         <ChevronLeft className="size-5" />
       </button>
@@ -178,7 +178,7 @@ export function HeroSlider() {
         type="button"
         onClick={() => go(index + 1)}
         className="absolute right-2 top-1/2 hidden size-10 -translate-y-1/2 place-items-center rounded-full text-navy transition hover:bg-white/70 md:grid"
-        aria-label="Next slide"
+        aria-label="Дараах слайд"
       >
         <ChevronRight className="size-5" />
       </button>
@@ -189,7 +189,7 @@ export function HeroSlider() {
             type="button"
             onClick={() => go(i)}
             className={cn("h-2 rounded-full transition-all", i === index ? "w-6 bg-navy" : "w-2 bg-navy/25 hover:bg-navy/50")}
-            aria-label={`Go to slide ${i + 1}`}
+            aria-label={`${i + 1}-р слайд руу шилжих`}
             aria-current={i === index}
           />
         ))}
