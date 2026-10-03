@@ -20,8 +20,8 @@ const columns = [
       { label: "Түгээмэл асуулт", href: "/contact#faq" },
       { label: "Хүргэлтийн нөхцөл", href: "/contact#faq" },
       { label: "Буцаалт ба мөнгө буцаах", href: "/contact#faq" },
-      { label: "Үйлчилгээний нөхцөл", href: "/about" },
-      { label: "Нууцлалын бодлого", href: "/about" },
+      { label: "Үйлчилгээний нөхцөл", href: "/terms" },
+      { label: "Нууцлалын бодлого", href: "/privacy" },
     ],
   },
   {
