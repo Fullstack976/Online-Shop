@@ -10,7 +10,7 @@ import { signOutAction } from "@/app/auth/actions";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { cn } from "@/lib/cn";
 import { getSessionData } from "@/lib/data";
-import { getUser } from "@/lib/supabase/server";
+import { getSupabase, getUser, isAdminUser } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Миний бүртгэл" };
 
@@ -37,6 +37,8 @@ export default async function AccountPage() {
 
   const user = await getUser();
   if (!user) redirect("/login?next=/account");
+  const supabase = await getSupabase();
+  if (supabase && (await isAdminUser(supabase, user.id))) redirect("/auth/to-admin");
 
   const meta = (user.user_metadata ?? {}) as { full_name?: string; name?: string; avatar_url?: string };
   const name = meta.full_name || meta.name || user.email?.split("@")[0] || "Хэрэглэгч";

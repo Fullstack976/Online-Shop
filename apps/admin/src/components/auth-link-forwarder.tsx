@@ -13,7 +13,7 @@ const SET_PASSWORD_PATH = "/auth/set-password";
 export function AuthLinkForwarder() {
   useEffect(() => {
     const { pathname, hash } = window.location;
-    if (pathname === SET_PASSWORD_PATH || !hash) return;
+    if (pathname === SET_PASSWORD_PATH || pathname === "/auth/handoff" || !hash) return;
     if (/(^|[#&])(access_token|error_code|error_description)=/.test(hash)) {
       window.location.replace(`${SET_PASSWORD_PATH}${hash}`);
     }

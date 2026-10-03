@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getSupabase, safeNext } from "@/lib/supabase/server";
+import { getSupabase, isAdminUser, safeNext } from "@/lib/supabase/server";
 
 export type AuthState = { error?: string; message?: string; values?: { name?: string; email?: string } };
 
@@ -37,8 +37,10 @@ export async function signInAction(_prev: AuthState, formData: FormData): Promis
   const supabase = await getSupabase();
   if (!supabase) return { error: "Нэвтрэх үйлчилгээ одоогоор идэвхгүй байна.", values: { email } };
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { error: translateAuthError(error.message), values: { email } };
+  // The shop owner goes straight to the admin dashboard.
+  if (await isAdminUser(supabase, data.user.id)) redirect("/auth/to-admin");
   redirect(next);
 }
 

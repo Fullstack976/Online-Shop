@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { getSupabase, safeNext } from "@/lib/supabase/server";
+import { getSupabase, isAdminUser, safeNext } from "@/lib/supabase/server";
 
 /** Landing route for Google sign-in and email confirmation links (PKCE code exchange). */
 export async function GET(request: NextRequest) {
@@ -9,8 +9,11 @@ export async function GET(request: NextRequest) {
   const supabase = await getSupabase();
 
   if (code && supabase) {
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) return NextResponse.redirect(`${origin}${next}`);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      if (data.user && (await isAdminUser(supabase, data.user.id))) return NextResponse.redirect(`${origin}/auth/to-admin`);
+      return NextResponse.redirect(`${origin}${next}`);
+    }
   }
   return NextResponse.redirect(`${origin}/login?error=auth&next=${encodeURIComponent(next)}`);
 }

@@ -56,3 +56,9 @@ export function safeNext(value: unknown, fallback = "/account"): string {
   const next = typeof value === "string" ? value : "";
   return next.startsWith("/") && !next.startsWith("//") ? next : fallback;
 }
+
+/** Whether this auth user is a shop admin (profiles.role, readable by its owner under RLS). */
+export async function isAdminUser(supabase: SupabaseClient, userId: string): Promise<boolean> {
+  const { data } = await supabase.from("profiles").select("role").eq("id", userId).maybeSingle();
+  return data?.role === "admin";
+}
