@@ -11,10 +11,10 @@ import { buttonClass } from "@/components/ui/button";
 import { Card, TableScroll, td, th } from "@/components/ui/card";
 import { cn } from "@/lib/cn";
 import { getData } from "@/lib/data";
-import { formatDate, formatInt, formatPrice, pluralize } from "@/lib/format";
+import { formatDate, formatInt, formatPrice, withCount } from "@/lib/format";
 import { isOrderStatus, ORDER_STATUS_LIST } from "@/lib/orders";
 
-export const metadata: Metadata = { title: "Orders" };
+export const metadata: Metadata = { title: "Захиалга" };
 
 const PAGE_SIZE = 25;
 
@@ -46,22 +46,22 @@ export default async function OrdersPage({ searchParams }: PageProps<"/orders">)
   const visible = orders.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const tabs: { key: OrderStatus | null; label: string; count: number }[] = [
-    { key: null, label: "All", count: matching.length },
+    { key: null, label: "Бүгд", count: matching.length },
     ...ORDER_STATUS_LIST.map((s) => ({ key: s, label: STATUS_META[s].label, count: counts[s] })),
   ];
 
   return (
     <div className="animate-fade-in">
       <PageIntro>
-        {pluralize(orders.length, "order")}
-        {status ? ` ${STATUS_META[status].label.toLowerCase()}` : ""}
-        {q ? ` matching “${q}”` : ""} · {formatPrice(revenue)} in sales
-        {status === "cancelled" ? "" : " (excl. cancelled)"}.
+        {status ? `${STATUS_META[status].label}: ` : ""}
+        {withCount(orders.length, "захиалга")}
+        {q ? ` (“${q}” хайлтаар)` : ""} · борлуулалт {formatPrice(revenue)}
+        {status === "cancelled" ? "" : " (цуцалсныг хассан)"}.
       </PageIntro>
 
       <Card>
         <div className="border-b border-line">
-          <nav aria-label="Filter by status" className="no-scrollbar -mb-px flex gap-1 overflow-x-auto px-3 pt-2">
+          <nav aria-label="Төлөвөөр шүүх" className="no-scrollbar -mb-px flex gap-1 overflow-x-auto px-3 pt-2">
             {tabs.map((tab) => {
               const active = tab.key === status;
               return (
@@ -91,11 +91,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/orders">)
         </div>
 
         <div className="border-b border-line p-4">
-          <SearchInput
-            placeholder="Search by order #, customer name or email"
-            label="Search orders"
-            className="max-w-xl"
-          />
+          <SearchInput placeholder="Захиалгын №, нэр эсвэл имэйлээр хайх" label="Захиалга хайх" className="max-w-xl" />
         </div>
 
         {orders.length ? (
@@ -104,25 +100,25 @@ export default async function OrdersPage({ searchParams }: PageProps<"/orders">)
               <thead>
                 <tr className="border-b border-line bg-page/60">
                   <th scope="col" className={th}>
-                    Order
+                    Захиалга
                   </th>
                   <th scope="col" className={th}>
-                    Date
+                    Огноо
                   </th>
                   <th scope="col" className={th}>
-                    Customer
+                    Үйлчлүүлэгч
                   </th>
                   <th scope="col" className={`${th} text-right`}>
-                    Items
+                    Бараа
                   </th>
                   <th scope="col" className={`${th} text-right`}>
-                    Total
+                    Нийт
                   </th>
                   <th scope="col" className={th}>
-                    Status
+                    Төлөв
                   </th>
                   <th scope="col" className={th}>
-                    <span className="sr-only">Open</span>
+                    <span className="sr-only">Нээх</span>
                   </th>
                 </tr>
               </thead>
@@ -150,7 +146,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/orders">)
                         <Link
                           href={`/orders/${o.id}`}
                           className={buttonClass({ variant: "ghost", size: "icon" })}
-                          aria-label={`Open order ${o.orderNumber}`}
+                          aria-label={`${o.orderNumber} захиалгыг нээх`}
                         >
                           <ChevronRight aria-hidden />
                         </Link>
@@ -165,36 +161,40 @@ export default async function OrdersPage({ searchParams }: PageProps<"/orders">)
 
         {orders.length ? (
           <nav
-            aria-label="Pagination"
+            aria-label="Хуудаслалт"
             className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-5 py-3 text-xs text-muted"
           >
             <p className="tabular-nums">
-              Showing {formatInt((page - 1) * PAGE_SIZE + 1)}–{formatInt((page - 1) * PAGE_SIZE + visible.length)} of{" "}
+              {formatInt((page - 1) * PAGE_SIZE + 1)}–{formatInt((page - 1) * PAGE_SIZE + visible.length)} / нийт{" "}
               {formatInt(orders.length)}
             </p>
             {pageCount > 1 ? (
               <div className="flex items-center gap-2">
-                <PageLink href={page > 1 ? ordersHref(status, q, page - 1) : null} label="Previous" />
+                <PageLink href={page > 1 ? ordersHref(status, q, page - 1) : null} label="Өмнөх" direction="prev" />
                 <span className="tabular-nums">
-                  Page {page} of {pageCount}
+                  {page} / {pageCount} хуудас
                 </span>
-                <PageLink href={page < pageCount ? ordersHref(status, q, page + 1) : null} label="Next" />
+                <PageLink
+                  href={page < pageCount ? ordersHref(status, q, page + 1) : null}
+                  label="Дараах"
+                  direction="next"
+                />
               </div>
             ) : null}
           </nav>
         ) : (
           <EmptyState
             icon={<SearchX />}
-            title="No orders found"
+            title="Захиалга олдсонгүй"
             action={
               q || status ? (
                 <Link href="/orders" className={buttonClass({ variant: "secondary" })}>
-                  Clear filters
+                  Шүүлтүүр арилгах
                 </Link>
               ) : null
             }
           >
-            {q || status ? "Try another search or status." : "Orders placed in the storefront show up here."}
+            {q || status ? "Өөр хайлт эсвэл төлөв сонгоно уу." : "Дэлгүүрээс ирсэн захиалгууд энд харагдана."}
           </EmptyState>
         )}
       </Card>
@@ -202,13 +202,12 @@ export default async function OrdersPage({ searchParams }: PageProps<"/orders">)
   );
 }
 
-function PageLink({ href, label }: { href: string | null; label: string }) {
-  const Icon = label === "Previous" ? ChevronLeft : ChevronRight;
+function PageLink({ href, label, direction }: { href: string | null; label: string; direction: "prev" | "next" }) {
   const content = (
     <>
-      {label === "Previous" ? <Icon aria-hidden /> : null}
+      {direction === "prev" ? <ChevronLeft aria-hidden /> : null}
       {label}
-      {label === "Next" ? <Icon aria-hidden /> : null}
+      {direction === "next" ? <ChevronRight aria-hidden /> : null}
     </>
   );
   return href ? (

@@ -7,7 +7,8 @@
     ".": "./src/index.ts",
     "./mock": "./src/mock/index.ts",
     "./utils": "./src/utils.ts",
-    "./assets": "./src/site-assets.ts"
+    "./assets": "./src/site-assets.ts",
+    "./env": "./src/env.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

@@ -1,7 +1,7 @@
 import { ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/cn";
 
-/** "SHOPLUXE" wordmark with the bag mark, plus an optional "Admin" tag. */
+/** "SHOPLUXE" wordmark with the bag mark, plus an optional "Админ" tag. */
 export function Logo({ tone = "light", showTag = true }: { tone?: "light" | "dark"; showTag?: boolean }) {
   return (
     <span className="inline-flex items-center gap-2.5">
@@ -23,7 +23,7 @@ export function Logo({ tone = "light", showTag = true }: { tone?: "light" | "dar
             tone === "light" ? "bg-white/10 text-tan-200" : "bg-tan-100 text-tan-600",
           )}
         >
-          Admin
+          Админ
         </span>
       ) : null}
     </span>

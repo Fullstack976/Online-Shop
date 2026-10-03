@@ -31,7 +31,7 @@ function useParamWriter() {
 export function SearchInput({
   placeholder,
   param = "q",
-  label = "Search",
+  label = "Хайх",
   className,
 }: {
   placeholder: string;
@@ -91,7 +91,7 @@ export function SearchInput({
       {isPending ? (
         <LoaderCircle
           className="absolute top-1/2 right-3 size-4 -translate-y-1/2 animate-spin text-tan"
-          aria-label="Loading results"
+          aria-label="Үр дүнг ачаалж байна"
         />
       ) : null}
     </div>

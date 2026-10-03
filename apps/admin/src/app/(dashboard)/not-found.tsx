@@ -11,19 +11,19 @@ export default function DashboardNotFound() {
         <Compass className="size-6" aria-hidden />
       </span>
       <p className="label-caps text-tan-600">404</p>
-      <h2 className="mt-1 font-display text-xl font-extrabold tracking-tight text-navy">We couldn&apos;t find that</h2>
+      <h2 className="mt-1 font-display text-xl font-extrabold tracking-tight text-navy">Хайсан зүйл олдсонгүй</h2>
       <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
-        It may have been deleted, or the link is out of date. Head back to a list and try again.
+        Устгагдсан эсвэл холбоос хуучирсан байж магадгүй. Жагсаалт руу буцаад дахин оролдоно уу.
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-2">
         <Link href="/" className={buttonClass({ variant: "primary" })}>
-          Go to dashboard
+          Хянах самбар
         </Link>
         <Link href="/products" className={buttonClass({ variant: "secondary" })}>
-          Products
+          Бүтээгдэхүүн
         </Link>
         <Link href="/orders" className={buttonClass({ variant: "secondary" })}>
-          Orders
+          Захиалга
         </Link>
       </div>
     </Card>

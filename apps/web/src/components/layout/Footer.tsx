@@ -31,7 +31,7 @@ const columns = [
       { label: "Захиалгын түүх", href: "/account" },
       { label: "Сагс", href: "/cart" },
       { label: "Захиалга хийх", href: "/checkout" },
-      { label: "Нэвтрэх / Бүртгүүлэх", href: "/account" },
+      { label: "Нэвтрэх / Бүртгүүлэх", href: "/login" },
     ],
   },
 ];

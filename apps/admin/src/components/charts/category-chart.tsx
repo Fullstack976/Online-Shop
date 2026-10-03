@@ -18,7 +18,7 @@ export function CategoryChart({ data }: { data: Row[] }) {
 
   return (
     <figure
-      aria-label={`Revenue by category: ${data.map((d) => `${d.category} ${formatPrice(d.revenue)}`).join(", ")}.`}
+      aria-label={`Ангиллаар орлого: ${data.map((d) => `${d.category} ${formatPrice(d.revenue)}`).join(", ")}.`}
       className="w-full"
       style={{ height }}
     >
@@ -34,7 +34,7 @@ export function CategoryChart({ data }: { data: Row[] }) {
         <YAxis
           type="category"
           dataKey="category"
-          width={112}
+          width={124}
           tick={{ ...tickStyle, fill: chart.ink, fontSize: 12.5 }}
           tickLine={false}
           axisLine={{ stroke: chart.axis }}
@@ -51,14 +51,14 @@ export function CategoryChart({ data }: { data: Row[] }) {
               <div className="rounded-lg border border-line bg-white px-3 py-2.5 shadow-lg">
                 <p className="text-xs text-muted">{row.category}</p>
                 <p className="mt-1 text-sm font-semibold text-ink tabular-nums">{formatPrice(row.revenue)}</p>
-                <p className="text-xs text-muted tabular-nums">{share}% of category sales</p>
+                <p className="text-xs text-muted tabular-nums">Нийт борлуулалтын {share}%</p>
               </div>
             );
           }}
         />
         <Bar
           dataKey="revenue"
-          name="Revenue"
+          name="Орлого"
           fill={chart.revenue}
           barSize={18}
           radius={[0, 4, 4, 0]}

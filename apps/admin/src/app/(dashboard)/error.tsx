@@ -16,14 +16,14 @@ export default function DashboardError({ error, retry }: { error: Error & { dige
       <span className="mx-auto mb-5 inline-flex size-14 items-center justify-center rounded-full bg-danger-bg text-danger">
         <TriangleAlert className="size-6" aria-hidden />
       </span>
-      <h2 className="font-display text-xl font-extrabold tracking-tight text-navy">Something went wrong</h2>
+      <h2 className="font-display text-xl font-extrabold tracking-tight text-navy">Алдаа гарлаа</h2>
       <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
-        We couldn&apos;t load this page. Check your connection and that your account still has admin access, then try
-        again.
+        Энэ хуудсыг ачаалж чадсангүй. Интернэт холболт болон таны бүртгэл админ эрхтэй хэвээр эсэхийг шалгаад дахин
+        оролдоно уу.
       </p>
-      {error.digest ? <p className="mt-3 font-mono text-xs text-subtle">Reference: {error.digest}</p> : null}
+      {error.digest ? <p className="mt-3 font-mono text-xs text-subtle">Лавлах код: {error.digest}</p> : null}
       <Button className="mt-6" onClick={() => retry()}>
-        <RefreshCw aria-hidden /> Try again
+        <RefreshCw aria-hidden /> Дахин оролдох
       </Button>
     </Card>
   );

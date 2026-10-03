@@ -22,6 +22,33 @@ export function parseNumber(raw: string): number {
 
 export const round2 = (n: number) => Math.round(n * 100) / 100;
 
-export function errorMessage(error: unknown, fallback = "Something went wrong. Please try again."): string {
-  return error instanceof Error && error.message ? error.message : fallback;
+const CYRILLIC = /[\u0400-\u04FF]/;
+
+/**
+ * `@shop/db` and Supabase report errors in English; map the ones admins can
+ * hit to Mongolian. Messages that are already Mongolian pass through.
+ */
+const KNOWN_ERRORS: [RegExp, string][] = [
+  [
+    /move or delete this category's products|still referenced by other records/i,
+    "Энэ ангилалд бүтээгдэхүүн байна. Эхлээд тэдгээрийг шилжүүлэх эсвэл устгана уу.",
+  ],
+  [/slug.*(already|in use)|already (exists|in use)/i, "Энэ slug аль хэдийн ашиглагдаж байна."],
+  [/product not found/i, "Бүтээгдэхүүн олдсонгүй."],
+  [/category not found/i, "Ангилал олдсонгүй."],
+  [/order not found/i, "Захиалга олдсонгүй."],
+  [/permission denied|row-level security/i, "Зөвшөөрөл алга. Энэ хэрэглэгч админ эрхтэй эсэхийг шалгана уу."],
+  [
+    /fetch failed|network|ECONNREFUSED|ENOTFOUND/i,
+    "Supabase-тэй холбогдож чадсангүй. Холболтоо шалгаад дахин оролдоно уу.",
+  ],
+  [/JWT|session/i, "Нэвтрэлтийн хугацаа дууссан байна. Дахин нэвтэрнэ үү."],
+];
+
+export function errorMessage(error: unknown, fallback = "Алдаа гарлаа. Дахин оролдоно уу."): string {
+  const raw = error instanceof Error ? error.message : "";
+  if (!raw) return fallback;
+  if (CYRILLIC.test(raw)) return raw;
+  for (const [pattern, message] of KNOWN_ERRORS) if (pattern.test(raw)) return message;
+  return `${fallback} (${raw})`;
 }

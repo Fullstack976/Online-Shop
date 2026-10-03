@@ -18,7 +18,13 @@ import type {
   ProductWithCategory,
 } from "./types.ts";
 
-export type OrderFilter = { status?: OrderStatus; q?: string; limit?: number };
+export type OrderFilter = {
+  status?: OrderStatus;
+  q?: string;
+  limit?: number;
+  /** Only orders placed by this auth user (storefront order history). */
+  userId?: string;
+};
 
 export interface DataSource {
   mode: "supabase" | "mock";
@@ -447,6 +453,7 @@ export function createSupabaseSource(client: SupabaseClient): DataSource {
     },
     async listOrders(filter = {}) {
       let query = client.from("orders").select(ORDER_SELECT).order("created_at", { ascending: false });
+      if (filter.userId) query = query.eq("user_id", filter.userId);
       if (filter.status) query = query.eq("status", filter.status);
       if (filter.q) {
         const q = escapeLike(filter.q).replace(/[,()]/g, " ");

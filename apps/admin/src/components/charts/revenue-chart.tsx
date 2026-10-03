@@ -2,7 +2,14 @@
 
 import type { DailyPoint } from "@shop/db";
 import { Area, AreaChart, CartesianGrid, Tooltip, XAxis, YAxis } from "recharts";
-import { formatCompactCurrency, formatDayKey, formatInt, formatPrice, niceTicks } from "@/lib/format";
+import {
+  formatCompactCurrency,
+  formatDayKey,
+  formatDayKeyShort,
+  formatInt,
+  formatPrice,
+  niceTicks,
+} from "@/lib/format";
 import { chart, tickStyle } from "./theme";
 
 /**
@@ -18,7 +25,7 @@ export function RevenueChart({ data }: { data: DailyPoint[] }) {
 
   return (
     <figure
-      aria-label={`Daily revenue from ${first ? formatDayKey(first) : ""} to ${last ? formatDayKey(last) : ""}, ${formatPrice(total)} in total.`}
+      aria-label={`Өдөр тутмын орлого, ${first ? formatDayKey(first) : ""} – ${last ? formatDayKey(last) : ""}: нийт ${formatPrice(total)}.`}
       className="h-[280px] w-full"
     >
       <AreaChart
@@ -36,7 +43,7 @@ export function RevenueChart({ data }: { data: DailyPoint[] }) {
         <CartesianGrid vertical={false} stroke={chart.grid} />
         <XAxis
           dataKey="date"
-          tickFormatter={formatDayKey}
+          tickFormatter={formatDayKeyShort}
           tick={tickStyle}
           tickLine={false}
           axisLine={{ stroke: chart.axis }}
@@ -66,11 +73,11 @@ export function RevenueChart({ data }: { data: DailyPoint[] }) {
                 <div className="mt-1.5 flex items-center gap-2">
                   <span aria-hidden className="h-0.5 w-3 rounded-full" style={{ background: chart.revenue }} />
                   <span className="text-sm font-semibold text-ink tabular-nums">{formatPrice(point.revenue)}</span>
-                  <span className="text-xs text-muted">revenue</span>
+                  <span className="text-xs text-muted">орлого</span>
                 </div>
                 <div className="mt-1 flex items-center gap-2 pl-5">
                   <span className="text-sm font-semibold text-ink tabular-nums">{formatInt(point.orders)}</span>
-                  <span className="text-xs text-muted">{point.orders === 1 ? "order" : "orders"}</span>
+                  <span className="text-xs text-muted">захиалга</span>
                 </div>
               </div>
             );
@@ -79,7 +86,7 @@ export function RevenueChart({ data }: { data: DailyPoint[] }) {
         <Area
           type="monotone"
           dataKey="revenue"
-          name="Revenue"
+          name="Орлого"
           stroke={chart.revenue}
           strokeWidth={2}
           strokeLinejoin="round"

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { PageIntro } from "@/components/page-intro";
 import { getData } from "@/lib/data";
-import { pluralize } from "@/lib/format";
+import { withCount } from "@/lib/format";
 import { CategoryManager } from "./category-manager";
 
-export const metadata: Metadata = { title: "Categories" };
+export const metadata: Metadata = { title: "Ангилал" };
 
 export default async function CategoriesPage() {
   const data = await getData();
@@ -19,7 +19,7 @@ export default async function CategoriesPage() {
   return (
     <div className="animate-fade-in">
       <PageIntro>
-        {pluralize(categories.length, "category", "categories")} organising {pluralize(products.length, "product")}.
+        {withCount(categories.length, "ангилал")} · нийт {withCount(products.length, "бүтээгдэхүүн")}.
       </PageIntro>
       <CategoryManager
         categories={categories.map((c) => ({

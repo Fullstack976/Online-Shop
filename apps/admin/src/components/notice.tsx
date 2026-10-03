@@ -15,7 +15,7 @@ export function Notice({ message, dismissHref }: { message: string; dismissHref:
         scroll={false}
         replace
         className="inline-flex size-7 items-center justify-center rounded-md hover:bg-success/10"
-        aria-label="Dismiss"
+        aria-label="Хаах"
       >
         <X className="size-4" />
       </Link>

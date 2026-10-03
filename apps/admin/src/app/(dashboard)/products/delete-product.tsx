@@ -18,10 +18,10 @@ export function DeleteProduct({ id, name }: { id: string; name: string }) {
     <Card className="mt-6 border-danger/20">
       <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h2 className="font-display text-[15px] font-bold text-ink">Delete product</h2>
+          <h2 className="font-display text-[15px] font-bold text-ink">Бүтээгдэхүүн устгах</h2>
           <p className="mt-0.5 text-[13px] text-muted">
-            Removes it from the catalog. Past orders keep their line items. Prefer turning off{" "}
-            <span className="font-semibold text-ink">Active</span> to hide it temporarily.
+            Каталогоос бүрмөсөн хасна. Өмнөх захиалгуудын мэдээлэл хадгалагдана. Түр нуух бол{" "}
+            <span className="font-semibold text-ink">Идэвхтэй</span> тохиргоог унтраахад хангалттай.
           </p>
         </div>
         {!confirming ? (
@@ -31,7 +31,7 @@ export function DeleteProduct({ id, name }: { id: string; name: string }) {
             onClick={() => setConfirming(true)}
           >
             <Trash aria-hidden />
-            Delete…
+            Устгах…
           </Button>
         ) : null}
       </div>
@@ -47,16 +47,17 @@ export function DeleteProduct({ id, name }: { id: string; name: string }) {
             <p className="flex items-start gap-2 text-sm text-ink">
               <TriangleAlert className="mt-0.5 size-4 shrink-0 text-danger" aria-hidden />
               <span>
-                Delete <span className="font-semibold">{name}</span>? This can&apos;t be undone.
+                <span className="font-semibold">“{name}”</span> бүтээгдэхүүнийг устгах уу? Энэ үйлдлийг буцаах
+                боломжгүй.
               </span>
             </p>
             <div className="flex shrink-0 gap-2">
               <Button variant="ghost" onClick={() => setConfirming(false)} disabled={pending}>
-                Cancel
+                Болих
               </Button>
               <Button type="submit" variant="danger" disabled={pending} autoFocus>
                 {pending ? <LoaderCircle className="animate-spin" aria-hidden /> : <Trash aria-hidden />}
-                {pending ? "Deleting…" : "Yes, delete"}
+                {pending ? "Устгаж байна…" : "Тийм, устгах"}
               </Button>
             </div>
           </div>

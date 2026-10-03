@@ -47,7 +47,7 @@ export function Shell({
       </aside>
 
       {drawerOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Navigation">
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Цэс">
           <div
             className="animate-fade-in absolute inset-0 bg-navy/50 backdrop-blur-[2px]"
             onClick={() => setDrawerOpen(false)}
@@ -64,7 +64,7 @@ export function Shell({
                   autoFocus
                   onClick={() => setDrawerOpen(false)}
                   className="inline-flex size-9 items-center justify-center rounded-lg text-white/70 hover:bg-white/10 hover:text-white"
-                  aria-label="Close navigation"
+                  aria-label="Цэс хаах"
                 >
                   <X className="size-5" />
                 </button>
@@ -81,14 +81,14 @@ export function Shell({
               type="button"
               onClick={() => setDrawerOpen(true)}
               className="-ml-1.5 inline-flex size-9 items-center justify-center rounded-lg text-navy hover:bg-page lg:hidden"
-              aria-label="Open navigation"
+              aria-label="Цэс нээх"
               aria-expanded={drawerOpen}
             >
               <Menu className="size-5" />
             </button>
             <div className="min-w-0 flex-1">
               {parent ? (
-                <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-xs text-muted">
+                <nav aria-label="Замчлал" className="flex items-center gap-1 text-xs text-muted">
                   <Link href={parent.href} className="hover:text-tan-600">
                     {parent.label}
                   </Link>
@@ -107,8 +107,8 @@ export function Shell({
                 className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-line bg-white px-2.5 text-[13px] font-semibold text-navy shadow-xs transition-colors hover:border-tan hover:text-tan-600 sm:px-3"
               >
                 <ExternalLink className="size-4" aria-hidden />
-                <span className="hidden sm:inline">View store</span>
-                <span className="sr-only sm:hidden">View store</span>
+                <span className="hidden sm:inline">Дэлгүүр үзэх</span>
+                <span className="sr-only sm:hidden">Дэлгүүр үзэх</span>
               </a>
               {topbarEnd}
             </div>
@@ -137,14 +137,14 @@ function SidebarContent({
   return (
     <div className="flex h-full w-full flex-col bg-navy text-white">
       <div className="flex h-16 shrink-0 items-center justify-between gap-2 border-b border-white/[0.07] px-5">
-        <Link href="/" onClick={onNavigate} aria-label="ShopLuxe Admin dashboard">
+        <Link href="/" onClick={onNavigate} aria-label="ShopLuxe админ самбар">
           <Logo />
         </Link>
         {closeButton}
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-5" aria-label="Main">
-        <p className="label-caps px-3 pb-2 text-[10px] text-white/40">Manage</p>
+      <nav className="flex-1 overflow-y-auto px-3 py-5" aria-label="Үндсэн цэс">
+        <p className="label-caps px-3 pb-2 text-[10px] text-white/40">Удирдлага</p>
         <ul className="space-y-1">
           {NAV_ITEMS.map(({ href, label, Icon }) => {
             const active = isActive(pathname, href);
@@ -189,8 +189,8 @@ function SidebarContent({
           className="flex items-center justify-between gap-3 rounded-lg bg-white/[0.05] px-3 py-2.5 text-sm text-white/80 transition-colors hover:bg-white/[0.09] hover:text-white"
         >
           <span>
-            <span className="block font-semibold">Storefront</span>
-            <span className="block text-xs text-white/45">Everything you need</span>
+            <span className="block font-semibold">Дэлгүүр</span>
+            <span className="block text-xs text-white/45">Танд хэрэгтэй бүхэн</span>
           </span>
           <ExternalLink className="size-4 text-tan" aria-hidden />
         </a>

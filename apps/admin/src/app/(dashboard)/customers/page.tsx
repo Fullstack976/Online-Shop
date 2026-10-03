@@ -10,16 +10,16 @@ import { PageIntro } from "@/components/page-intro";
 import { buttonClass } from "@/components/ui/button";
 import { Card, TableScroll, td, th } from "@/components/ui/card";
 import { getData } from "@/lib/data";
-import { formatDate, formatInt, formatPrice, formatRelative, pluralize } from "@/lib/format";
+import { formatDate, formatInt, formatPrice, formatRelative, withCount } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Customers" };
+export const metadata: Metadata = { title: "Үйлчлүүлэгчид" };
 
 const SORT_OPTIONS = [
-  { value: "", label: "Top spenders" },
-  { value: "orders", label: "Most orders" },
-  { value: "recent", label: "Recent activity" },
-  { value: "newest", label: "Newest customers" },
-  { value: "name", label: "Name A–Z" },
+  { value: "", label: "Хамгийн их зарцуулсан" },
+  { value: "orders", label: "Хамгийн олон захиалсан" },
+  { value: "recent", label: "Сүүлд идэвхтэй" },
+  { value: "newest", label: "Шинээр бүртгүүлсэн" },
+  { value: "name", label: "Нэрээр (А–Я)" },
 ];
 
 function sortCustomers(list: CustomerWithStats[], sort: string) {
@@ -33,7 +33,7 @@ function sortCustomers(list: CustomerWithStats[], sort: string) {
     case "newest":
       return sorted.sort((a, b) => time(b.createdAt) - time(a.createdAt));
     case "name":
-      return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      return sorted.sort((a, b) => a.name.localeCompare(b.name, "mn"));
     default:
       return sorted.sort((a, b) => b.totalSpent - a.totalSpent);
   }
@@ -56,14 +56,14 @@ export default async function CustomersPage({ searchParams }: PageProps<"/custom
   return (
     <div className="animate-fade-in">
       <PageIntro>
-        {pluralize(all.length, "customer")} · {formatInt(repeat)} repeat buyers · {formatPrice(lifetime)} lifetime
-        sales.
+        {withCount(all.length, "үйлчлүүлэгч")} · {withCount(repeat, "давтан худалдан авагч")} · нийт борлуулалт{" "}
+        {formatPrice(lifetime)}.
       </PageIntro>
 
       <Card>
         <div className="flex flex-col gap-3 border-b border-line p-4 sm:flex-row sm:items-center">
-          <SearchInput placeholder="Search by name, email or city" label="Search customers" className="sm:flex-1" />
-          <SelectFilter param="sort" label="Sort customers" options={SORT_OPTIONS} className="sm:w-48" />
+          <SearchInput placeholder="Нэр, имэйл эсвэл хотоор хайх" label="Үйлчлүүлэгч хайх" className="sm:flex-1" />
+          <SelectFilter param="sort" label="Эрэмбэлэх" options={SORT_OPTIONS} className="sm:w-60" />
         </div>
 
         {customers.length ? (
@@ -73,22 +73,22 @@ export default async function CustomersPage({ searchParams }: PageProps<"/custom
                 <thead>
                   <tr className="border-b border-line bg-page/60">
                     <th scope="col" className={th}>
-                      Customer
+                      Үйлчлүүлэгч
                     </th>
                     <th scope="col" className={th}>
-                      City
+                      Хот
                     </th>
                     <th scope="col" className={`${th} text-right`}>
-                      Orders
+                      Захиалга
                     </th>
                     <th scope="col" className={`${th} text-right`}>
-                      Total spent
+                      Нийт зарцуулсан
                     </th>
                     <th scope="col" className={th}>
-                      Last order
+                      Сүүлийн захиалга
                     </th>
                     <th scope="col" className={th}>
-                      Joined
+                      Бүртгүүлсэн
                     </th>
                   </tr>
                 </thead>
@@ -112,7 +112,7 @@ export default async function CustomersPage({ searchParams }: PageProps<"/custom
                           <Link
                             href={`/orders?q=${encodeURIComponent(c.email)}`}
                             className="font-medium text-navy hover:text-tan-600"
-                            title={`View ${c.name}'s orders`}
+                            title={`Захиалгуудыг харах: ${c.name}`}
                           >
                             {formatInt(c.orderCount)}
                           </Link>
@@ -139,23 +139,23 @@ export default async function CustomersPage({ searchParams }: PageProps<"/custom
               </table>
             </TableScroll>
             <p className="border-t border-line px-5 py-3 text-xs text-muted">
-              Showing {formatInt(customers.length)} of {pluralize(all.length, "customer")}. Order counts and totals
-              exclude cancelled orders.
+              Харуулж буй: {formatInt(customers.length)} / {withCount(all.length, "үйлчлүүлэгч")}. Захиалгын тоо, дүнд
+              цуцалсан захиалга ороогүй.
             </p>
           </>
         ) : (
           <EmptyState
             icon={<SearchX />}
-            title={q ? "No customers found" : "No customers yet"}
+            title={q ? "Үйлчлүүлэгч олдсонгүй" : "Үйлчлүүлэгч алга байна"}
             action={
               q ? (
                 <Link href="/customers" className={buttonClass({ variant: "secondary" })}>
-                  Clear search
+                  Хайлт арилгах
                 </Link>
               ) : null
             }
           >
-            {q ? "Try a different name, email or city." : "Customers are created when they place an order."}
+            {q ? "Өөр нэр, имэйл эсвэл хот оруулж үзнэ үү." : "Захиалга хийхэд үйлчлүүлэгч автоматаар бүртгэгдэнэ."}
           </EmptyState>
         )}
       </Card>

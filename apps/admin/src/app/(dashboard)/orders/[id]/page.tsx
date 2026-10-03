@@ -11,7 +11,7 @@ import { buttonClass } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/cn";
 import { getData } from "@/lib/data";
-import { formatDateTime, formatInt, formatPrice, pluralize } from "@/lib/format";
+import { formatDateTime, formatInt, formatPrice, withCount } from "@/lib/format";
 import { UUID_PATTERN } from "@/lib/validation";
 import { StatusForm } from "./status-form";
 
@@ -24,7 +24,7 @@ const loadOrder = cache(async (id: string) => {
 export async function generateMetadata({ params }: PageProps<"/orders/[id]">): Promise<Metadata> {
   const { id } = await params;
   const order = await loadOrder(id);
-  return { title: order ? `Order ${order.orderNumber}` : "Order not found" };
+  return { title: order ? `Захиалга ${order.orderNumber}` : "Захиалга олдсонгүй" };
 }
 
 const FLOW: OrderStatus[] = ["pending", "processing", "shipped", "delivered"];
@@ -42,15 +42,15 @@ export default async function OrderPage({ params }: PageProps<"/orders/[id]">) {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-3">
-            <h2 className="font-display text-xl font-bold tracking-tight text-navy">Order {order.orderNumber}</h2>
+            <h2 className="font-display text-xl font-bold tracking-tight text-navy">Захиалга {order.orderNumber}</h2>
             <OrderStatusBadge status={order.status} />
           </div>
           <p className="mt-1 text-sm text-muted">
-            Placed {formatDateTime(order.createdAt)} · {pluralize(itemCount, "item")}
+            {formatDateTime(order.createdAt)} · {withCount(itemCount, "ширхэг бараа")}
           </p>
         </div>
         <Link href="/orders" className={buttonClass({ variant: "secondary", size: "sm" })}>
-          <ArrowLeft aria-hidden /> All orders
+          <ArrowLeft aria-hidden /> Бүх захиалга
         </Link>
       </div>
 
@@ -58,11 +58,11 @@ export default async function OrderPage({ params }: PageProps<"/orders/[id]">) {
       <Card className="px-5 py-4">
         {order.status === "cancelled" ? (
           <p className="text-sm text-danger">
-            <span className="font-semibold">This order was cancelled.</span>{" "}
-            <span className="text-muted">It is excluded from revenue and sales reports.</span>
+            <span className="font-semibold">Энэ захиалга цуцлагдсан.</span>{" "}
+            <span className="text-muted">Орлого, борлуулалтын тайланд тооцогдохгүй.</span>
           </p>
         ) : (
-          <ol className="grid grid-cols-4 gap-2" aria-label="Fulfilment progress">
+          <ol className="grid grid-cols-4 gap-2" aria-label="Захиалгын явц">
             {FLOW.map((s, i) => {
               const done = i <= step;
               const Icon = STATUS_META[s].Icon;
@@ -91,7 +91,7 @@ export default async function OrderPage({ params }: PageProps<"/orders/[id]">) {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Card className="overflow-hidden lg:col-span-2 lg:self-start">
-          <CardHeader title="Items" description={pluralize(itemCount, "unit") + " in this order"} />
+          <CardHeader title="Бараа" description={`Энэ захиалгад ${withCount(itemCount, "ширхэг")}`} />
           <ul className="mt-3 divide-y divide-line border-t border-line">
             {order.items.map((item) => {
               const body = (
@@ -126,15 +126,15 @@ export default async function OrderPage({ params }: PageProps<"/orders/[id]">) {
           </ul>
           <dl className="space-y-2 border-t border-line bg-page/40 px-5 py-4 text-sm">
             <div className="flex justify-between gap-4">
-              <dt className="text-muted">Subtotal</dt>
+              <dt className="text-muted">Барааны дүн</dt>
               <dd className="tabular-nums">{formatPrice(order.subtotal)}</dd>
             </div>
             <div className="flex justify-between gap-4">
-              <dt className="text-muted">Shipping</dt>
-              <dd className="tabular-nums">{order.shipping ? formatPrice(order.shipping) : "Free"}</dd>
+              <dt className="text-muted">Хүргэлт</dt>
+              <dd className="tabular-nums">{order.shipping ? formatPrice(order.shipping) : "Үнэгүй"}</dd>
             </div>
             <div className="flex justify-between gap-4 border-t border-line pt-2 text-base">
-              <dt className="font-display font-bold text-navy">Total</dt>
+              <dt className="font-display font-bold text-navy">Нийт дүн</dt>
               <dd className="font-display font-bold text-navy tabular-nums">{formatPrice(order.total)}</dd>
             </div>
           </dl>
@@ -142,20 +142,22 @@ export default async function OrderPage({ params }: PageProps<"/orders/[id]">) {
 
         <div className="space-y-6">
           <Card>
-            <CardHeader title="Update status" />
+            <CardHeader title="Төлөв шинэчлэх" />
             <div className="p-5">
               <StatusForm orderId={order.id} current={order.status} />
             </div>
           </Card>
 
           <Card>
-            <CardHeader title="Customer" />
+            <CardHeader title="Үйлчлүүлэгч" />
             <div className="space-y-3 p-5 text-sm">
               <div className="flex items-center gap-3">
                 <Avatar name={order.customerName} size={40} />
                 <div className="min-w-0">
                   <p className="truncate font-semibold text-ink">{order.customerName}</p>
-                  <p className="text-xs text-muted">{order.customerId ? "Registered customer" : "Guest checkout"}</p>
+                  <p className="text-xs text-muted">
+                    {order.customerId ? "Бүртгэлтэй үйлчлүүлэгч" : "Зочноор захиалсан"}
+                  </p>
                 </div>
               </div>
               <p className="flex items-center gap-2 text-muted">
@@ -171,14 +173,14 @@ export default async function OrderPage({ params }: PageProps<"/orders/[id]">) {
                     {order.phone}
                   </a>
                 ) : (
-                  <span>No phone number</span>
+                  <span>Утасны дугааргүй</span>
                 )}
               </p>
             </div>
           </Card>
 
           <Card>
-            <CardHeader title="Shipping address" />
+            <CardHeader title="Хүргэлтийн хаяг" />
             <div className="flex gap-2 p-5 text-sm">
               <MapPin className="mt-0.5 size-4 shrink-0 text-tan" aria-hidden />
               <address className="not-italic leading-relaxed text-ink">

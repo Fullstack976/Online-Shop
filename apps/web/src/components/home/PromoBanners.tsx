@@ -27,7 +27,7 @@ export function PromoBanners() {
             </p>
           </div>
         </Link>
-        <Link href="/account" className="group flex items-center gap-5 bg-cloud px-7 py-8 text-navy">
+        <Link href="/signup" className="group flex items-center gap-5 bg-cloud px-7 py-8 text-navy">
           <Gift className="size-12 shrink-0" strokeWidth={1.2} aria-hidden />
           <div>
             <p className="font-display text-sm font-extrabold uppercase tracking-wide">Гишүүний давуу тал</p>

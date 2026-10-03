@@ -13,8 +13,8 @@ export function DemoPill() {
           <span className="absolute inline-flex size-full animate-ping rounded-full bg-tan opacity-50 motion-reduce:hidden" />
           <span className="relative inline-flex size-2 rounded-full bg-tan" />
         </span>
-        <span className="hidden sm:inline">Demo mode · mock data</span>
-        <span className="sm:hidden">Demo</span>
+        <span className="hidden sm:inline">Демо горим · туршилтын өгөгдөл</span>
+        <span className="sm:hidden">Демо</span>
       </span>
       <span
         id="demo-mode-tip"
@@ -23,12 +23,15 @@ export function DemoPill() {
       >
         <span className="mb-1 flex items-center gap-1.5 font-semibold text-white">
           <Info className="size-3.5 text-tan" aria-hidden />
-          Running on built-in mock data
+          Туршилтын өгөгдөл дээр ажиллаж байна
         </span>
-        Sign-in is skipped and every change is kept in memory until the server restarts. Add{" "}
-        <code className="rounded bg-white/10 px-1 text-[11px] text-tan-200">NEXT_PUBLIC_SUPABASE_URL</code> and{" "}
-        <code className="rounded bg-white/10 px-1 text-[11px] text-tan-200">NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code>{" "}
-        to connect a real database.
+        Нэвтрэлт алгасагдаж, бүх өөрчлөлт сервер дахин эхлэх хүртэл санах ойд л хадгалагдана. Бодит өгөгдлийн сантай
+        холбохын тулд{" "}
+        <code className="rounded bg-white/10 px-1 text-[11px] text-tan-200">NEXT_PUBLIC_SUPABASE_URL</code> болон{" "}
+        <code className="rounded bg-white/10 px-1 text-[11px] break-all text-tan-200">
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+        </code>{" "}
+        утгуудыг тохируулна уу.
       </span>
     </span>
   );

@@ -1,5 +1,6 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createDataSource, getSupabaseEnv, type DataSource } from "@shop/db";
+import { getSupabase } from "@/lib/supabase/server";
 
 let client: SupabaseClient | null | undefined;
 
@@ -15,4 +16,9 @@ export function getData(): DataSource {
       : null;
   }
   return createDataSource(client);
+}
+
+/** Data access as the signed-in shopper (checkout, order history). Mock data without env vars. */
+export async function getSessionData(): Promise<DataSource> {
+  return createDataSource(await getSupabase());
 }

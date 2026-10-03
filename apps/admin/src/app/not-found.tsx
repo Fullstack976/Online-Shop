@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Logo } from "@/components/shell/logo";
 import { buttonClass } from "@/components/ui/button";
 
-export const metadata: Metadata = { title: "Page not found" };
+export const metadata: Metadata = { title: "Хуудас олдсонгүй" };
 
 /** App-wide 404 for URLs that match no route. */
 export default function NotFound() {
@@ -20,10 +20,10 @@ export default function NotFound() {
         <p className="font-display text-7xl font-extrabold tracking-tight text-white/90">
           4<span className="text-tan">0</span>4
         </p>
-        <h1 className="mt-4 font-display text-xl font-bold text-white">This page is out of stock</h1>
-        <p className="mt-2 text-sm text-white/60">The page you&apos;re looking for doesn&apos;t exist or has moved.</p>
+        <h1 className="mt-4 font-display text-xl font-bold text-white">Энэ хуудас “дууссан” бололтой</h1>
+        <p className="mt-2 text-sm text-white/60">Таны хайсан хуудас байхгүй эсвэл өөр хаяг руу шилжсэн байна.</p>
         <Link href="/" className={`${buttonClass({ variant: "accent" })} mt-8`}>
-          Back to dashboard
+          Хянах самбар руу буцах
         </Link>
       </div>
     </div>

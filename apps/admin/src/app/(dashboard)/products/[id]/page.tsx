@@ -5,7 +5,7 @@ import { CalendarDays, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { getData } from "@/lib/data";
 import { supabaseEnv } from "@/lib/env";
-import { formatDate, formatInt } from "@/lib/format";
+import { formatDateLong, formatInt } from "@/lib/format";
 import { UUID_PATTERN } from "@/lib/validation";
 import { DeleteProduct } from "../delete-product";
 import { ProductForm } from "../product-form";
@@ -20,7 +20,7 @@ const loadProduct = cache(async (id: string) => {
 export async function generateMetadata({ params }: PageProps<"/products/[id]">): Promise<Metadata> {
   const { id } = await params;
   const product = await loadProduct(id);
-  return { title: product ? `Edit ${product.name}` : "Product not found" };
+  return { title: product ? `Засах: ${product.name}` : "Бүтээгдэхүүн олдсонгүй" };
 }
 
 export default async function EditProductPage({ params }: PageProps<"/products/[id]">) {
@@ -35,15 +35,15 @@ export default async function EditProductPage({ params }: PageProps<"/products/[
     <>
       <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
         <h2 className="font-display text-xl font-bold tracking-tight text-navy">{product.name}</h2>
-        <Badge tone={product.isActive ? "success" : "neutral"}>{product.isActive ? "Active" : "Draft"}</Badge>
+        <Badge tone={product.isActive ? "success" : "neutral"}>{product.isActive ? "Идэвхтэй" : "Ноорог"}</Badge>
         <span className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted">
           <span className="inline-flex items-center gap-1">
-            <CalendarDays className="size-3.5" aria-hidden /> Added {formatDate(product.createdAt)}
+            <CalendarDays className="size-3.5" aria-hidden /> Нэмсэн: {formatDateLong(product.createdAt)}
           </span>
           {product.reviewCount ? (
             <span className="inline-flex items-center gap-1">
               <Star className="size-3.5 fill-tan text-tan" aria-hidden /> {product.rating.toFixed(1)} ·{" "}
-              {formatInt(product.reviewCount)} reviews
+              {formatInt(product.reviewCount)} сэтгэгдэл
             </span>
           ) : null}
         </span>

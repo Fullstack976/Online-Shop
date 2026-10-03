@@ -12,38 +12,38 @@ import { Badge } from "@/components/ui/badge";
 import { buttonClass } from "@/components/ui/button";
 import { Card, TableScroll, td, th } from "@/components/ui/card";
 import { getData } from "@/lib/data";
-import { formatInt, formatPrice, pluralize } from "@/lib/format";
+import { formatInt, formatPrice, withCount } from "@/lib/format";
 import { LOW_STOCK_THRESHOLD } from "@/lib/orders";
 
-export const metadata: Metadata = { title: "Products" };
+export const metadata: Metadata = { title: "Бүтээгдэхүүн" };
 
 const STATUS_OPTIONS = [
-  { value: "", label: "All statuses" },
-  { value: "active", label: "Active" },
-  { value: "draft", label: "Draft" },
-  { value: "trending", label: "Trending" },
-  { value: "low", label: "Low stock" },
+  { value: "", label: "Бүх төлөв" },
+  { value: "active", label: "Идэвхтэй" },
+  { value: "draft", label: "Ноорог" },
+  { value: "trending", label: "Тренд" },
+  { value: "low", label: "Нөөц багассан" },
 ];
 
 const SORT_OPTIONS = [
-  { value: "", label: "Newest first" },
-  { value: "name", label: "Name A–Z" },
-  { value: "price-desc", label: "Price: high to low" },
-  { value: "price-asc", label: "Price: low to high" },
-  { value: "stock", label: "Stock: low to high" },
+  { value: "", label: "Шинэ нь эхэндээ" },
+  { value: "name", label: "Нэрээр (А–Я)" },
+  { value: "price-desc", label: "Үнэ: өндрөөс бага" },
+  { value: "price-asc", label: "Үнэ: багаас өндөр" },
+  { value: "stock", label: "Нөөц: багаас их" },
 ];
 
 const NOTICES: Record<string, string> = {
-  created: "Product created.",
-  updated: "Changes saved.",
-  deleted: "Product deleted.",
+  created: "Бүтээгдэхүүн нэмэгдлээ.",
+  updated: "Өөрчлөлт хадгалагдлаа.",
+  deleted: "Бүтээгдэхүүн устгагдлаа.",
 };
 
 function sortProducts(list: ProductWithCategory[], sort: string) {
   const sorted = [...list];
   switch (sort) {
     case "name":
-      return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      return sorted.sort((a, b) => a.name.localeCompare(b.name, "mn"));
     case "price-desc":
       return sorted.sort((a, b) => b.price - a.price);
     case "price-asc":
@@ -88,31 +88,31 @@ export default async function ProductsPage({ searchParams }: PageProps<"/product
         actions={
           <Link href="/products/new" className={buttonClass({ variant: "primary" })}>
             <Plus aria-hidden />
-            Add product
+            Бүтээгдэхүүн нэмэх
           </Link>
         }
       >
-        {pluralize(all.length, "product")} in your catalog
-        {drafts ? ` · ${formatInt(drafts)} ${drafts === 1 ? "draft" : "drafts"}` : ""}.
+        Каталогт {withCount(all.length, "бүтээгдэхүүн")}
+        {drafts ? ` · ${withCount(drafts, "ноорог")}` : ""}.
       </PageIntro>
 
       <Card>
         <div className="flex flex-col gap-3 border-b border-line p-4 md:flex-row md:items-center">
-          <SearchInput placeholder="Search by name, slug or category" label="Search products" className="md:flex-1" />
+          <SearchInput placeholder="Нэр, slug эсвэл ангиллаар хайх" label="Бүтээгдэхүүн хайх" className="md:flex-1" />
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:flex md:w-auto">
             <SelectFilter
               param="category"
-              label="Filter by category"
+              label="Ангиллаар шүүх"
               options={[
-                { value: "", label: "All categories" },
+                { value: "", label: "Бүх ангилал" },
                 ...categories.map((c) => ({ value: c.slug, label: c.name })),
               ]}
               className="md:w-44"
             />
-            <SelectFilter param="status" label="Filter by status" options={STATUS_OPTIONS} className="md:w-36" />
+            <SelectFilter param="status" label="Төлөвөөр шүүх" options={STATUS_OPTIONS} className="md:w-36" />
             <SelectFilter
               param="sort"
-              label="Sort products"
+              label="Эрэмбэлэх"
               options={SORT_OPTIONS}
               className="col-span-2 sm:col-span-1 md:w-44"
             />
@@ -126,22 +126,22 @@ export default async function ProductsPage({ searchParams }: PageProps<"/product
                 <thead>
                   <tr className="border-b border-line bg-page/60">
                     <th scope="col" className={th}>
-                      Product
+                      Бүтээгдэхүүн
                     </th>
                     <th scope="col" className={th}>
-                      Category
+                      Ангилал
                     </th>
                     <th scope="col" className={`${th} text-right`}>
-                      Price
+                      Үнэ
                     </th>
                     <th scope="col" className={th}>
-                      Stock
+                      Нөөц
                     </th>
                     <th scope="col" className={th}>
-                      Status
+                      Төлөв
                     </th>
                     <th scope="col" className={th}>
-                      <span className="sr-only">Actions</span>
+                      <span className="sr-only">Үйлдэл</span>
                     </th>
                   </tr>
                 </thead>
@@ -173,10 +173,10 @@ export default async function ProductsPage({ searchParams }: PageProps<"/product
                       </td>
                       <td className={td}>
                         <span className="flex items-center gap-1.5">
-                          <Badge tone={p.isActive ? "success" : "neutral"}>{p.isActive ? "Active" : "Draft"}</Badge>
+                          <Badge tone={p.isActive ? "success" : "neutral"}>{p.isActive ? "Идэвхтэй" : "Ноорог"}</Badge>
                           {p.isTrending ? (
                             <Badge tone="tan" icon={<Flame aria-hidden />}>
-                              Trending
+                              Тренд
                             </Badge>
                           ) : null}
                         </span>
@@ -185,7 +185,7 @@ export default async function ProductsPage({ searchParams }: PageProps<"/product
                         <Link
                           href={`/products/${p.id}`}
                           className={buttonClass({ variant: "ghost", size: "icon" })}
-                          aria-label={`Edit ${p.name}`}
+                          aria-label={`Засах: ${p.name}`}
                         >
                           <Pencil aria-hidden />
                         </Link>
@@ -196,26 +196,26 @@ export default async function ProductsPage({ searchParams }: PageProps<"/product
               </table>
             </TableScroll>
             <p className="border-t border-line px-5 py-3 text-xs text-muted">
-              Showing {formatInt(products.length)} of {pluralize(all.length, "product")}
+              Харуулж буй: {formatInt(products.length)} / {withCount(all.length, "бүтээгдэхүүн")}
             </p>
           </>
         ) : (
           <EmptyState
             icon={<PackageSearch />}
-            title={hasFilters ? "No products match your filters" : "No products yet"}
+            title={hasFilters ? "Шүүлтүүрт тохирох бүтээгдэхүүн алга" : "Бүтээгдэхүүн алга байна"}
             action={
               hasFilters ? (
                 <Link href="/products" className={buttonClass({ variant: "secondary" })}>
-                  Clear filters
+                  Шүүлтүүр арилгах
                 </Link>
               ) : (
                 <Link href="/products/new" className={buttonClass({ variant: "primary" })}>
-                  <Plus aria-hidden /> Add your first product
+                  <Plus aria-hidden /> Анхны бүтээгдэхүүнээ нэмэх
                 </Link>
               )
             }
           >
-            {hasFilters ? "Try a different search term, category or status." : "Products you add appear here."}
+            {hasFilters ? "Өөр түлхүүр үг, ангилал эсвэл төлөв сонгоод үзнэ үү." : "Нэмсэн бүтээгдэхүүн энд харагдана."}
           </EmptyState>
         )}
       </Card>

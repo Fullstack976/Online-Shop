@@ -29,7 +29,7 @@ export function KpiTile({
   return (
     <div className="flex min-w-0 flex-col rounded-xl border border-line bg-white p-4 sm:p-5 shadow-[0_1px_2px_rgba(15,28,46,0.04),0_4px_16px_-8px_rgba(15,28,46,0.06)]">
       <div className="flex items-start justify-between gap-3">
-        <p className="text-[13px] font-medium text-muted">{label}</p>
+        <p className="min-h-[2lh] text-[13px] font-medium text-muted sm:min-h-0">{label}</p>
         <span className="hidden size-9 shrink-0 items-center justify-center rounded-lg bg-beige text-tan-600 min-[420px]:inline-flex [&_svg]:size-[18px]">
           {icon}
         </span>
@@ -49,10 +49,12 @@ export function KpiTile({
           <span aria-hidden className="text-[9px] leading-none">
             {glyph}
           </span>
-          <span className="sr-only">{direction === "up" ? "Up" : direction === "down" ? "Down" : "No change"}</span>
-          {rounded === null ? "New" : `${rounded > 0 ? "+" : ""}${rounded.toFixed(1)}%`}
+          <span className="sr-only">
+            {direction === "up" ? "Өссөн" : direction === "down" ? "Буурсан" : "Өөрчлөлтгүй"}
+          </span>
+          {rounded === null ? "Шинэ" : `${rounded > 0 ? "+" : ""}${rounded.toFixed(1)}%`}
         </span>
-        <span className="text-muted">vs {previousLabel}</span>
+        <span className="text-muted">{previousLabel}</span>
       </p>
     </div>
   );

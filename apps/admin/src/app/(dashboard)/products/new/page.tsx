@@ -3,7 +3,7 @@ import { getData } from "@/lib/data";
 import { supabaseEnv } from "@/lib/env";
 import { ProductForm } from "../product-form";
 
-export const metadata: Metadata = { title: "New product" };
+export const metadata: Metadata = { title: "Шинэ бүтээгдэхүүн" };
 
 export default async function NewProductPage() {
   const data = await getData();

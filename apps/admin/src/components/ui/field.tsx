@@ -27,7 +27,7 @@ export function Field({
     <div className={cn("min-w-0", className)}>
       <label htmlFor={htmlFor} className="mb-1.5 flex items-baseline gap-1.5 text-[13px] font-semibold text-ink">
         {label}
-        {optional ? <span className="text-xs font-normal text-subtle">Optional</span> : null}
+        {optional ? <span className="text-xs font-normal text-subtle">Заавал биш</span> : null}
       </label>
       {children}
       {error ? (

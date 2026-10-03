@@ -38,7 +38,7 @@ export function UserMenu({ name, email, role }: { name: string; email: string; r
         <Avatar name={name} size={32} />
         <span className="hidden max-w-[10rem] truncate text-sm font-semibold text-ink md:block">{name}</span>
         <ChevronDown className={cn("hidden size-4 text-muted transition-transform sm:block", open && "rotate-180")} />
-        <span className="sr-only">Account menu</span>
+        <span className="sr-only">Бүртгэлийн цэс</span>
       </button>
 
       {open ? (
@@ -54,7 +54,7 @@ export function UserMenu({ name, email, role }: { name: string; email: string; r
             </div>
           </div>
           <div className="px-4 py-2.5 text-xs text-muted">
-            Role: <span className="label-caps text-[10px] text-tan-600">{role}</span>
+            Эрх: <span className="label-caps text-[10px] text-tan-600">{role === "admin" ? "Админ" : role}</span>
           </div>
           <form action={signOut} className="border-t border-line p-1.5">
             <button
@@ -63,7 +63,7 @@ export function UserMenu({ name, email, role }: { name: string; email: string; r
               className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-sm font-medium text-ink hover:bg-page"
             >
               <LogOut className="size-4 text-muted" aria-hidden />
-              Sign out
+              Гарах
             </button>
           </form>
         </div>

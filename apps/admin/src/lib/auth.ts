@@ -25,7 +25,7 @@ async function loadViewer(): Promise<Viewer> {
     .maybeSingle();
 
   const email = data.user.email ?? profile?.email ?? "";
-  const name = (profile?.full_name as string | null)?.trim() || email.split("@")[0] || "Admin";
+  const name = (profile?.full_name as string | null)?.trim() || email.split("@")[0] || "Админ";
   const role = (profile?.role as string | undefined) ?? null;
   return {
     mode: "supabase",
@@ -45,6 +45,7 @@ export const getViewer = cache(loadViewer);
 export async function requireAdmin(): Promise<void> {
   const viewer = await loadViewer();
   if (viewer.mode === "mock") return;
-  if (!viewer.user) throw new Error("Your session has expired. Please sign in again.");
-  if (!viewer.isAdmin) throw new Error("Only admins can make changes. Ask an owner to set your role to admin.");
+  if (!viewer.user) throw new Error("Нэвтрэлтийн хугацаа дууссан байна. Дахин нэвтэрнэ үү.");
+  if (!viewer.isAdmin)
+    throw new Error("Зөвхөн админ өөрчлөлт хийх эрхтэй. Эзэмшигчээс эрхээ admin болгуулахыг хүснэ үү.");
 }

@@ -13,10 +13,10 @@ import { Thumb } from "@/components/thumb";
 import { buttonClass } from "@/components/ui/button";
 import { Card, CardHeader, TableScroll, td, th } from "@/components/ui/card";
 import { getData } from "@/lib/data";
-import { formatDayKey, formatInt, formatPrice, formatRelative, pluralize } from "@/lib/format";
+import { formatDayKey, formatInt, formatPrice, formatRelative, withCount } from "@/lib/format";
 import { ORDER_STATUS_LIST } from "@/lib/orders";
 
-export const metadata: Metadata = { title: "Dashboard" };
+export const metadata: Metadata = { title: "Хянах самбар" };
 
 const wholeDollars = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
@@ -31,62 +31,62 @@ export default async function DashboardPage() {
       <PageIntro
         actions={
           <Link href="/products/new" className={buttonClass({ variant: "primary" })}>
-            Add product
+            Бүтээгдэхүүн нэмэх
           </Link>
         }
       >
-        <p className="font-display text-base font-bold text-navy">Welcome back</p>
+        <p className="font-display text-base font-bold text-navy">Тавтай морил</p>
         <p className="mt-0.5">
-          Store performance for the last 30 days
-          {firstDay && lastDay ? ` (${formatDayKey(firstDay)} – ${formatDayKey(lastDay)})` : ""}, compared with the 30
-          days before.
+          Сүүлийн 30 хоногийн
+          {firstDay && lastDay ? ` (${formatDayKey(firstDay)} – ${formatDayKey(lastDay)})` : ""} дэлгүүрийн гүйцэтгэлийг
+          өмнөх 30 хоногтой харьцуулав.
         </p>
       </PageIntro>
 
-      <section aria-label="Key metrics" className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+      <section aria-label="Гол үзүүлэлтүүд" className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <KpiTile
-          label="Revenue (30 days)"
+          label="Орлого (30 хоног)"
           value={wholeDollars.format(stats.revenue.current)}
           current={stats.revenue.current}
           previous={stats.revenue.previous}
           icon={<DollarSign aria-hidden />}
-          previousLabel={`${wholeDollars.format(stats.revenue.previous)} prev.`}
+          previousLabel={`өмнө нь ${wholeDollars.format(stats.revenue.previous)}`}
         />
         <KpiTile
-          label="Orders"
+          label="Захиалга"
           value={formatInt(stats.orders.current)}
           current={stats.orders.current}
           previous={stats.orders.previous}
           icon={<ShoppingCart aria-hidden />}
-          previousLabel={`${formatInt(stats.orders.previous)} prev.`}
+          previousLabel={`өмнө нь ${formatInt(stats.orders.previous)}`}
         />
         <KpiTile
-          label="New customers"
+          label="Шинэ үйлчлүүлэгч"
           value={formatInt(stats.customers.current)}
           current={stats.customers.current}
           previous={stats.customers.previous}
           icon={<UserPlus aria-hidden />}
-          previousLabel={`${formatInt(stats.customers.previous)} prev.`}
+          previousLabel={`өмнө нь ${formatInt(stats.customers.previous)}`}
         />
         <KpiTile
-          label="Avg. order value"
+          label="Дундаж захиалгын дүн"
           value={formatPrice(stats.averageOrderValue.current)}
           current={stats.averageOrderValue.current}
           previous={stats.averageOrderValue.previous}
           icon={<Receipt aria-hidden />}
-          previousLabel={`${formatPrice(stats.averageOrderValue.previous)} prev.`}
+          previousLabel={`өмнө нь ${formatPrice(stats.averageOrderValue.previous)}`}
         />
       </section>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader
-            title="Revenue over time"
-            description="Daily revenue, last 30 days · cancelled orders excluded"
+            title="Орлогын явц"
+            description="Өдөр тутмын орлого, сүүлийн 30 хоног · цуцалсан захиалгыг хассан"
             action={
               <div className="text-right">
                 <p className="font-display text-lg font-bold text-navy">{formatPrice(stats.revenue.current)}</p>
-                <p className="text-xs text-muted">{pluralize(stats.orders.current, "order")}</p>
+                <p className="text-xs text-muted">{withCount(stats.orders.current, "захиалга")}</p>
               </div>
             }
           />
@@ -101,13 +101,18 @@ export default async function DashboardPage() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader title="Sales by category" description="Revenue from items sold, last 30 days" />
+          <CardHeader title="Ангиллаар борлуулалт" description="Зарагдсан барааны орлого, сүүлийн 30 хоног" />
           <div className="px-3 pt-4 pb-5 sm:px-5">
             {stats.salesByCategory.length ? (
-              <CategoryChart data={stats.salesByCategory} />
+              <CategoryChart
+                data={stats.salesByCategory.map((row) => ({
+                  ...row,
+                  category: row.category === "Uncategorized" ? "Ангилалгүй" : row.category,
+                }))}
+              />
             ) : (
-              <EmptyState icon={<ShoppingCart />} title="No sales yet" className="py-10">
-                Category sales show up once orders come in.
+              <EmptyState icon={<ShoppingCart />} title="Борлуулалт алга" className="py-10">
+                Захиалга ирмэгц ангиллын борлуулалт энд харагдана.
               </EmptyState>
             )}
           </div>
@@ -129,22 +134,22 @@ function RevenueTable({ daily }: { daily: DashboardStats["daily"] }) {
   return (
     <details className="group border-t border-line">
       <summary className="flex cursor-pointer list-none items-center justify-between px-5 py-3 text-xs font-semibold text-muted select-none hover:text-ink [&::-webkit-details-marker]:hidden">
-        Show data table
+        Хүснэгтээр харах
         <ArrowRight className="size-3.5 transition-transform group-open:rotate-90" aria-hidden />
       </summary>
       <TableScroll className="max-h-72 overflow-y-auto border-t border-line">
         <table className="w-full text-sm">
-          <caption className="sr-only">Daily revenue and orders, last 30 days</caption>
+          <caption className="sr-only">Сүүлийн 30 хоногийн өдөр тутмын орлого, захиалга</caption>
           <thead className="sticky top-0 bg-white">
             <tr className="border-b border-line">
               <th scope="col" className={th}>
-                Day
+                Өдөр
               </th>
               <th scope="col" className={`${th} text-right`}>
-                Orders
+                Захиалга
               </th>
               <th scope="col" className={`${th} text-right`}>
-                Revenue
+                Орлого
               </th>
             </tr>
           </thead>
@@ -171,12 +176,12 @@ function StatusBreakdown({ counts }: { counts: DashboardStats["statusCounts"] })
   return (
     <Card>
       <CardHeader
-        title="Orders by status"
-        description="All orders placed in the last 30 days"
+        title="Төлөв бүрээр захиалга"
+        description="Сүүлийн 30 хоногт ирсэн бүх захиалга"
         action={
           <div className="text-right">
             <p className="font-display text-lg font-bold text-navy">{formatInt(total)}</p>
-            <p className="text-xs text-muted">orders</p>
+            <p className="text-xs text-muted">захиалга</p>
           </div>
         }
       />
@@ -189,7 +194,7 @@ function StatusBreakdown({ counts }: { counts: DashboardStats["statusCounts"] })
               <Link
                 href={`/orders?status=${status}`}
                 className="group block rounded-lg outline-offset-4"
-                title={`${STATUS_META[status].label}: ${count} orders (${share}%)`}
+                title={`${STATUS_META[status].label}: ${count} захиалга (${share}%)`}
               >
                 <div className="mb-1.5 flex items-center justify-between gap-3">
                   <OrderStatusBadge status={status} />
@@ -214,7 +219,7 @@ function StatusBreakdown({ counts }: { counts: DashboardStats["statusCounts"] })
           href="/orders"
           className="inline-flex items-center gap-1 text-xs font-semibold text-tan-600 hover:text-navy"
         >
-          Manage orders <ArrowRight className="size-3.5" aria-hidden />
+          Захиалга удирдах <ArrowRight className="size-3.5" aria-hidden />
         </Link>
       </div>
     </Card>
@@ -225,7 +230,7 @@ function TopProducts({ products }: { products: DashboardStats["topProducts"] }) 
   const max = Math.max(1, ...products.map((p) => p.revenue));
   return (
     <Card>
-      <CardHeader title="Top products" description="Best sellers by revenue, last 30 days" />
+      <CardHeader title="Шилдэг бүтээгдэхүүн" description="Орлогоор тэргүүлэгчид, сүүлийн 30 хоног" />
       {products.length ? (
         <ol className="divide-y divide-line px-5 pt-2 pb-2">
           {products.map((p, i) => {
@@ -243,7 +248,7 @@ function TopProducts({ products }: { products: DashboardStats["topProducts"] }) 
                       />
                     </div>
                     <span className="shrink-0 text-xs text-muted tabular-nums">
-                      {pluralize(p.quantity, "sold", "sold")}
+                      {formatInt(p.quantity)} ш зарагдсан
                     </span>
                   </div>
                 </div>
@@ -264,8 +269,8 @@ function TopProducts({ products }: { products: DashboardStats["topProducts"] }) 
           })}
         </ol>
       ) : (
-        <EmptyState icon={<ShoppingCart />} title="No sales yet">
-          Best sellers appear here once orders come in.
+        <EmptyState icon={<ShoppingCart />} title="Борлуулалт алга">
+          Захиалга ирмэгц хамгийн их зарагдсан бараа энд харагдана.
         </EmptyState>
       )}
     </Card>
@@ -276,11 +281,11 @@ function RecentOrders({ orders }: { orders: DashboardStats["recentOrders"] }) {
   return (
     <Card className="lg:col-span-2">
       <CardHeader
-        title="Recent orders"
-        description="The latest orders across all statuses"
+        title="Сүүлийн захиалгууд"
+        description="Бүх төлөвийн хамгийн сүүлийн захиалгууд"
         action={
           <Link href="/orders" className={buttonClass({ variant: "secondary", size: "sm" })}>
-            View all
+            Бүгдийг харах
           </Link>
         }
       />
@@ -289,19 +294,19 @@ function RecentOrders({ orders }: { orders: DashboardStats["recentOrders"] }) {
           <thead>
             <tr className="border-y border-line bg-page/60">
               <th scope="col" className={th}>
-                Order
+                Захиалга
               </th>
               <th scope="col" className={th}>
-                Customer
+                Үйлчлүүлэгч
               </th>
               <th scope="col" className={th}>
-                Placed
+                Хугацаа
               </th>
               <th scope="col" className={`${th} text-right`}>
-                Total
+                Нийт
               </th>
               <th scope="col" className={th}>
-                Status
+                Төлөв
               </th>
             </tr>
           </thead>
@@ -335,8 +340,8 @@ function LowStock({ products }: { products: DashboardStats["lowStock"] }) {
   return (
     <Card>
       <CardHeader
-        title="Low stock"
-        description="Active products with 10 or fewer left"
+        title="Нөөц багассан"
+        description="10 ба түүнээс цөөн үлдсэн идэвхтэй бүтээгдэхүүн"
         action={
           products.length ? (
             <span className="rounded-full bg-warning-bg px-2 py-0.5 text-xs font-semibold text-warning tabular-nums">
@@ -353,7 +358,7 @@ function LowStock({ products }: { products: DashboardStats["lowStock"] }) {
                 <Thumb src={p.images[0]} alt="" size={40} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-ink group-hover:text-tan-600">{p.name}</p>
-                  <p className="text-xs text-muted">Edit &amp; restock</p>
+                  <p className="text-xs text-muted">Засах, нөөц нэмэх</p>
                 </div>
                 <StockBadge stock={p.stock} />
               </Link>
@@ -361,8 +366,8 @@ function LowStock({ products }: { products: DashboardStats["lowStock"] }) {
           ))}
         </ul>
       ) : (
-        <EmptyState icon={<CircleCheck />} title="Stock looks healthy">
-          No active product is running low.
+        <EmptyState icon={<CircleCheck />} title="Нөөц хангалттай">
+          Нөөц багассан идэвхтэй бүтээгдэхүүн алга.
         </EmptyState>
       )}
       {products.length > 8 ? (
@@ -371,7 +376,7 @@ function LowStock({ products }: { products: DashboardStats["lowStock"] }) {
             href="/products?status=low"
             className="inline-flex items-center gap-1 text-xs font-semibold text-tan-600 hover:text-navy"
           >
-            See all {products.length} <ArrowRight className="size-3.5" aria-hidden />
+            Бүгдийг харах ({products.length}) <ArrowRight className="size-3.5" aria-hidden />
           </Link>
         </div>
       ) : null}

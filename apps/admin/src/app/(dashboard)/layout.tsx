@@ -42,10 +42,11 @@ function AccessDenied({ email }: { email: string }) {
           <span className="mx-auto mb-4 inline-flex size-12 items-center justify-center rounded-full bg-danger-bg text-danger">
             <ShieldAlert className="size-6" aria-hidden />
           </span>
-          <h1 className="font-display text-xl font-extrabold tracking-tight text-navy">Access denied</h1>
+          <h1 className="font-display text-xl font-extrabold tracking-tight text-navy">Хандах эрхгүй</h1>
           <p className="mt-2 text-sm leading-relaxed text-muted">
-            You&apos;re signed in as <span className="font-semibold text-ink">{email}</span>, but this account
-            isn&apos;t an admin. Ask an owner to set your role to <span className="font-semibold text-ink">admin</span>.
+            Та <span className="font-semibold text-ink">{email}</span> хаягаар нэвтэрсэн ч энэ бүртгэл админ эрхгүй
+            байна. Дэлгүүрийн эзэмшигчээс эрхийг тань <span className="font-semibold text-ink">admin</span> болгохыг
+            хүснэ үү.
           </p>
           <pre className="mt-5 overflow-x-auto rounded-lg bg-navy px-4 py-3 text-left text-[11.5px] leading-relaxed text-tan-200">
             {`update public.profiles\n   set role = 'admin'\n where email = '${email.replace(/'/g, "''")}';`}
@@ -53,7 +54,7 @@ function AccessDenied({ email }: { email: string }) {
           <form action={signOut} className="mt-6">
             <Button type="submit" variant="secondary" className="w-full">
               <LogOut aria-hidden />
-              Sign out
+              Гарах
             </Button>
           </form>
         </div>

@@ -18,7 +18,13 @@ const fields = [
   { name: "city", label: "Хот / аймаг", autoComplete: "address-level2", type: "text", span: true },
 ] as const;
 
-export function CheckoutForm() {
+export function CheckoutForm({
+  defaults,
+  emailLocked = false,
+}: {
+  defaults?: { name: string; email: string };
+  emailLocked?: boolean;
+}) {
   const { items, hydrated } = useCart();
   const [state, action, pending] = useActionState<CheckoutState, FormData>(placeOrderAction, {});
 
@@ -54,12 +60,14 @@ export function CheckoutForm() {
                     name={f.name}
                     type={f.type}
                     autoComplete={f.autoComplete}
-                    defaultValue={state.values?.[f.name]}
+                    defaultValue={state.values?.[f.name] ?? (f.name === "name" || f.name === "email" ? defaults?.[f.name] : undefined)}
+                    readOnly={emailLocked && f.name === "email"}
                     aria-invalid={Boolean(error)}
                     aria-describedby={error ? `${f.name}-error` : undefined}
                     className={cn(
                       "h-11 w-full rounded-md border px-3.5 text-sm outline-none transition focus:border-navy focus:ring-2 focus:ring-navy/10",
                       error ? "border-red-400" : "border-line",
+                      emailLocked && f.name === "email" && "bg-cloud text-muted",
                     )}
                   />
                   {error && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { discountPercent, formatPrice, slugify } from "@shop/db/utils";
+import { discountPercent, formatPrice } from "@shop/db/utils";
 import { Eye, Flame, ImagePlus, Link2, LoaderCircle, RefreshCw, Star, Trash, Upload } from "lucide-react";
 import Link from "next/link";
 import { useActionState, useRef, useState, useTransition } from "react";
@@ -12,6 +12,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { cn } from "@/lib/cn";
 import { isHttpUrl } from "@/lib/images";
 import { LOW_STOCK_THRESHOLD } from "@/lib/orders";
+import { makeSlug } from "@/lib/slug";
 import { saveProduct, uploadProductImage, type ProductFormState } from "./actions";
 
 export type ProductFormValues = {
@@ -74,11 +75,11 @@ export function ProductForm({
     const url = newImage.trim();
     if (!url) return;
     if (!isHttpUrl(url)) {
-      setImageError("Enter a full image URL starting with https://");
+      setImageError("https://-ээр эхэлсэн бүтэн холбоос оруулна уу.");
       return;
     }
     if (images.includes(url)) {
-      setImageError("That image is already in the list.");
+      setImageError("Энэ зураг жагсаалтад аль хэдийн байна.");
       return;
     }
     setImages((list) => [...list, url]);
@@ -93,7 +94,7 @@ export function ProductForm({
     startUpload(async () => {
       const result = await uploadProductImage(body);
       if (result.url) setImages((list) => [...list, result.url!]);
-      else setImageError(result.error ?? "Upload failed.");
+      else setImageError(result.error ?? "Байршуулж чадсангүй.");
     });
   }
 
@@ -111,9 +112,12 @@ export function ProductForm({
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <Card>
-            <CardHeader title="Details" description="What shoppers see on the product page." />
+            <CardHeader
+              title="Үндсэн мэдээлэл"
+              description="Худалдан авагчид бүтээгдэхүүний хуудсан дээр үзэх мэдээлэл."
+            />
             <div className="space-y-5 p-5">
-              <Field label="Name" htmlFor="name" error={errors.name}>
+              <Field label="Нэр" htmlFor="name" error={errors.name}>
                 <input
                   id="name"
                   name="name"
@@ -121,9 +125,9 @@ export function ProductForm({
                   onChange={(e) => {
                     const value = e.currentTarget.value;
                     setName(value);
-                    if (!slugTouched) setSlug(slugify(value));
+                    if (!slugTouched) setSlug(makeSlug(value));
                   }}
-                  placeholder="e.g. Smart Watch Series 9"
+                  placeholder="Жишээ нь: Ухаалаг цаг"
                   maxLength={120}
                   aria-invalid={Boolean(errors.name)}
                   aria-describedby={describedBy("name")}
@@ -132,7 +136,7 @@ export function ProductForm({
               </Field>
 
               <Field
-                label="URL slug"
+                label="URL slug (холбоосын нэр)"
                 htmlFor="slug"
                 error={errors.slug}
                 hint={
@@ -141,14 +145,14 @@ export function ProductForm({
                       type="button"
                       className="inline-flex items-center gap-1 font-medium text-tan-600 hover:text-navy"
                       onClick={() => {
-                        setSlug(slugify(name));
+                        setSlug(makeSlug(name));
                         setSlugTouched(false);
                       }}
                     >
-                      <RefreshCw className="size-3" aria-hidden /> Generate from name
+                      <RefreshCw className="size-3" aria-hidden /> Нэрнээс үүсгэх
                     </button>
                   ) : (
-                    "Generated from the name until you edit it."
+                    "Та засах хүртэл нэрнээс автоматаар үүснэ."
                   )
                 }
               >
@@ -164,7 +168,7 @@ export function ProductForm({
                       setSlug(e.currentTarget.value.toLowerCase().replace(/\s+/g, "-"));
                       setSlugTouched(true);
                     }}
-                    placeholder="smart-watch-series-9"
+                    placeholder="ukhaalag-tsag"
                     maxLength={140}
                     aria-invalid={Boolean(errors.slug)}
                     aria-describedby={describedBy("slug")}
@@ -173,7 +177,7 @@ export function ProductForm({
                 </div>
               </Field>
 
-              <Field label="Description" htmlFor="description" error={errors.description} optional>
+              <Field label="Тайлбар" htmlFor="description" error={errors.description} optional>
                 <textarea
                   id="description"
                   name="description"
@@ -181,7 +185,7 @@ export function ProductForm({
                   onChange={(e) => setDescription(e.currentTarget.value)}
                   rows={5}
                   maxLength={5000}
-                  placeholder="Materials, features, sizing…"
+                  placeholder="Материал, онцлог, хэмжээ…"
                   aria-invalid={Boolean(errors.description)}
                   aria-describedby={describedBy("description")}
                   className={cn(inputClass, "resize-y leading-relaxed")}
@@ -192,8 +196,8 @@ export function ProductForm({
 
           <Card>
             <CardHeader
-              title="Images"
-              description="The first image is the cover shown in listings."
+              title="Зураг"
+              description="Эхний зураг жагсаалтад харагдах нүүр зураг болно."
               action={<span className="text-xs text-muted tabular-nums">{images.length} / 12</span>}
             />
             <div className="space-y-4 p-5">
@@ -207,34 +211,34 @@ export function ProductForm({
                     <li key={url} className="group relative overflow-hidden rounded-xl border border-line bg-white">
                       <Thumb
                         src={url}
-                        alt={`Product image ${index + 1}`}
+                        alt={`Бүтээгдэхүүний зураг ${index + 1}`}
                         sizes="(min-width: 1280px) 180px, (min-width: 640px) 30vw, 45vw"
                         eager={index < 4}
                         className="aspect-square w-full rounded-none ring-0"
                       />
                       {index === 0 ? (
                         <span className="label-caps absolute top-2 left-2 rounded-md bg-navy/85 px-1.5 py-0.5 text-[9.5px] text-white">
-                          Cover
+                          Нүүр
                         </span>
                       ) : null}
                       <div className="flex items-center justify-between gap-1 border-t border-line p-1.5">
                         {index === 0 ? (
-                          <span className="px-1.5 text-xs whitespace-nowrap text-muted">Cover image</span>
+                          <span className="px-1.5 text-xs whitespace-nowrap text-muted">Нүүр зураг</span>
                         ) : (
                           <button
                             type="button"
                             onClick={() => setImages((list) => [url, ...list.filter((u) => u !== url)])}
                             className="inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-xs font-medium whitespace-nowrap text-muted hover:bg-page hover:text-ink"
-                            title="Use as cover image"
+                            title="Нүүр зураг болгох"
                           >
-                            <Star className="size-3.5" aria-hidden /> Set cover
+                            <Star className="size-3.5" aria-hidden /> Нүүр болгох
                           </button>
                         )}
                         <button
                           type="button"
                           onClick={() => setImages((list) => list.filter((u) => u !== url))}
                           className="inline-flex size-7 items-center justify-center rounded-md text-muted hover:bg-danger-bg hover:text-danger"
-                          aria-label={`Remove image ${index + 1}`}
+                          aria-label={`${index + 1}-р зургийг хасах`}
                         >
                           <Trash className="size-3.5" />
                         </button>
@@ -245,9 +249,9 @@ export function ProductForm({
               ) : (
                 <div className="flex flex-col items-center rounded-xl border border-dashed border-line-strong bg-page/50 px-4 py-8 text-center">
                   <ImagePlus className="size-6 text-tan" aria-hidden />
-                  <p className="mt-2 text-sm font-semibold text-ink">No images yet</p>
+                  <p className="mt-2 text-sm font-semibold text-ink">Зураг алга</p>
                   <p className="mt-0.5 text-xs text-muted">
-                    Paste an image URL{uploadEnabled ? " or upload a file" : ""} below.
+                    Доор зургийн холбоос буулгана уу{uploadEnabled ? " эсвэл файл байршуулна уу" : ""}.
                   </p>
                 </div>
               )}
@@ -255,7 +259,7 @@ export function ProductForm({
               <div className="flex flex-col gap-2 sm:flex-row">
                 <div className="relative min-w-0 flex-1">
                   <label htmlFor="new-image" className="sr-only">
-                    Image URL
+                    Зургийн холбоос
                   </label>
                   <Link2
                     className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-subtle"
@@ -283,7 +287,7 @@ export function ProductForm({
                 </div>
                 <div className="flex gap-2">
                   <Button variant="secondary" onClick={addImage} disabled={!newImage.trim() || images.length >= 12}>
-                    Add URL
+                    Холбоос нэмэх
                   </Button>
                   {uploadEnabled ? (
                     <>
@@ -305,7 +309,7 @@ export function ProductForm({
                         disabled={uploading || images.length >= 12}
                       >
                         {uploading ? <LoaderCircle className="animate-spin" aria-hidden /> : <Upload aria-hidden />}
-                        {uploading ? "Uploading…" : "Upload"}
+                        {uploading ? "Байршуулж байна…" : "Байршуулах"}
                       </Button>
                     </>
                   ) : null}
@@ -318,8 +322,8 @@ export function ProductForm({
               ) : (
                 <p className="text-xs text-muted">
                   {uploadEnabled
-                    ? "Uploads go to the product-images bucket in Supabase Storage (JPG, PNG, WebP, AVIF or GIF, up to 4 MB)."
-                    : "Demo mode: paste image URLs. File uploads are available once Supabase is connected."}
+                    ? "Зураг Supabase Storage-ийн product-images сан руу байршина (JPG, PNG, WebP, AVIF, GIF, 4 МБ хүртэл)."
+                    : "Демо горим: зургийн холбоос буулгана уу. Supabase холбогдсоны дараа файл байршуулах боломжтой."}
                 </p>
               )}
             </div>
@@ -328,9 +332,9 @@ export function ProductForm({
 
         <div className="space-y-6">
           <Card>
-            <CardHeader title="Pricing" />
+            <CardHeader title="Үнийн мэдээлэл" />
             <div className="space-y-5 p-5">
-              <Field label="Price" htmlFor="price" error={errors.price}>
+              <Field label="Үнэ" htmlFor="price" error={errors.price}>
                 <MoneyInput
                   id="price"
                   value={price}
@@ -340,17 +344,17 @@ export function ProductForm({
                 />
               </Field>
               <Field
-                label="Compare-at price"
+                label="Хуучин үнэ"
                 htmlFor="compareAtPrice"
                 error={errors.compareAtPrice}
                 optional
                 hint={
                   discount ? (
                     <span className="font-medium text-success">
-                      Shown as {discount}% off · was {formatPrice(compareNum)}
+                      {discount}% хямдралтай харагдана · өмнө нь {formatPrice(compareNum)}
                     </span>
                   ) : (
-                    "The original price, shown struck through."
+                    "Хямдралаас өмнөх үнэ, дээгүүр нь зурж харуулна."
                   )
                 }
               >
@@ -366,9 +370,9 @@ export function ProductForm({
           </Card>
 
           <Card>
-            <CardHeader title="Organization" />
+            <CardHeader title="Ангилал ба нөөц" />
             <div className="space-y-5 p-5">
-              <Field label="Category" htmlFor="categoryId" error={errors.categoryId}>
+              <Field label="Ангилал" htmlFor="categoryId" error={errors.categoryId}>
                 <select
                   id="categoryId"
                   name="categoryId"
@@ -378,7 +382,7 @@ export function ProductForm({
                   aria-describedby={describedBy("categoryId")}
                   className={selectClass}
                 >
-                  <option value="">Choose a category…</option>
+                  <option value="">Ангилал сонгох…</option>
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.name}
@@ -387,18 +391,18 @@ export function ProductForm({
                 </select>
               </Field>
               <Field
-                label="Stock"
+                label="Нөөц"
                 htmlFor="stock"
                 error={errors.stock}
                 hint={
                   stock !== "" && Number.isInteger(stockNum) && stockNum <= LOW_STOCK_THRESHOLD ? (
                     <span className="font-medium text-warning">
                       {stockNum <= 0
-                        ? "Out of stock — shoppers can't buy it."
-                        : "Low stock — flagged on the dashboard."}
+                        ? "Дууссан — худалдан авах боломжгүй."
+                        : "Нөөц бага — хянах самбарт анхааруулга гарна."}
                     </span>
                   ) : (
-                    "Units available to sell."
+                    "Зарах боломжтой тоо ширхэг."
                   )
                 }
               >
@@ -418,15 +422,15 @@ export function ProductForm({
           </Card>
 
           <Card>
-            <CardHeader title="Visibility" />
+            <CardHeader title="Харагдах байдал" />
             <div className="space-y-3 p-4">
               <Toggle
                 name="isActive"
                 checked={isActive}
                 onChange={setIsActive}
                 icon={<Eye className="text-success" aria-hidden />}
-                label="Active"
-                description={isActive ? "Visible in the storefront." : "Draft — hidden from the storefront."}
+                label="Идэвхтэй"
+                description={isActive ? "Дэлгүүрт харагдана." : "Ноорог — дэлгүүрт харагдахгүй."}
               />
               <div className="border-t border-line" />
               <Toggle
@@ -434,8 +438,8 @@ export function ProductForm({
                 checked={isTrending}
                 onChange={setIsTrending}
                 icon={<Flame className="text-tan" aria-hidden />}
-                label="Trending"
-                description="Featured in the storefront's trending section."
+                label="Тренд"
+                description="Дэлгүүрийн «Тренд» хэсэгт онцлогдоно."
               />
             </div>
           </Card>
@@ -445,11 +449,11 @@ export function ProductForm({
       <div className="sticky bottom-0 z-10 -mx-4 mt-6 border-t border-line bg-white/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div className="flex items-center justify-end gap-2">
           <Link href="/products" className={buttonClass({ variant: "ghost" })}>
-            Cancel
+            Болих
           </Link>
           <Button type="submit" disabled={saving || uploading}>
             {saving ? <LoaderCircle className="animate-spin" aria-hidden /> : null}
-            {saving ? "Saving…" : productId ? "Save changes" : "Create product"}
+            {saving ? "Хадгалж байна…" : productId ? "Өөрчлөлт хадгалах" : "Бүтээгдэхүүн үүсгэх"}
           </Button>
         </div>
       </div>

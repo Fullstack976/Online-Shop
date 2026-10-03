@@ -19,7 +19,7 @@ export function StatusForm({ orderId, current }: { orderId: string; current: Ord
   return (
     <form action={formAction} className="space-y-3">
       <label htmlFor="status" className="block text-[13px] font-semibold text-ink">
-        Order status
+        Захиалгын төлөв
       </label>
       <select
         id="status"
@@ -35,18 +35,16 @@ export function StatusForm({ orderId, current }: { orderId: string; current: Ord
         ))}
       </select>
       {status === "cancelled" && current !== "cancelled" ? (
-        <p className="text-xs text-warning">
-          Cancelled orders are excluded from revenue. Stock is not restocked automatically.
-        </p>
+        <p className="text-xs text-warning">Цуцалсан захиалга орлогод тооцогдохгүй. Нөөц автоматаар нөхөгдөхгүй.</p>
       ) : null}
       <Button type="submit" className="w-full" disabled={pending || !dirty}>
         {pending ? <LoaderCircle className="animate-spin" aria-hidden /> : null}
-        {pending ? "Saving…" : "Update status"}
+        {pending ? "Хадгалж байна…" : "Төлөв шинэчлэх"}
       </Button>
       {state.error ? <FormAlert>{state.error}</FormAlert> : null}
       {state.ok && !dirty && !pending ? (
         <p role="status" className="flex items-center justify-center gap-1.5 text-xs font-medium text-success">
-          <Check className="size-3.5" aria-hidden /> Saved — status is now {STATUS_META[current].label.toLowerCase()}.
+          <Check className="size-3.5" aria-hidden /> Хадгаллаа — одоогийн төлөв: {STATUS_META[current].label}.
         </p>
       ) : null}
     </form>

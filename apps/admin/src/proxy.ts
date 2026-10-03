@@ -4,8 +4,9 @@ import { supabaseEnv } from "@/lib/env";
 
 /**
  * Refreshes the Supabase session cookie on every request and sends signed-out
- * visitors to /login. This is an optimistic check only: the dashboard layout,
- * every Server Action and RLS re-check the user. In mock mode it does nothing.
+ * visitors to /login. `/auth/*` (invite / password-reset landing pages) is
+ * public. This is an optimistic check only: the dashboard layout, every Server
+ * Action and RLS re-check the user. In mock mode it does nothing.
  */
 export async function proxy(request: NextRequest) {
   const env = supabaseEnv();
@@ -31,8 +32,18 @@ export async function proxy(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const signedIn = Boolean(data?.claims?.sub);
 
-  const { pathname, search } = request.nextUrl;
+  const { pathname, search, searchParams } = request.nextUrl;
   const onLogin = pathname === "/login" || pathname.startsWith("/login/");
+  const onAuth = pathname === "/auth" || pathname.startsWith("/auth/");
+
+  // Invite / recovery links that fell back to the Site URL (e.g. "/?code=…"): finish them on the set-password page.
+  if (!onAuth && request.method === "GET" && (searchParams.has("code") || searchParams.has("token_hash"))) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/auth/set-password";
+    return withCookies(NextResponse.redirect(url), response);
+  }
+
+  if (onAuth) return response;
 
   if (!signedIn && !onLogin) {
     const url = request.nextUrl.clone();

@@ -8,19 +8,19 @@ export function StockBadge({ stock }: { stock: number }) {
   if (stock <= 0) {
     return (
       <Badge tone="danger" icon={<TriangleAlert aria-hidden />}>
-        Out of stock
+        Дууссан
       </Badge>
     );
   }
   if (stock <= 3) {
     return (
       <Badge tone="danger" icon={<TriangleAlert aria-hidden />}>
-        {formatInt(stock)} left
+        {formatInt(stock)} үлдсэн
       </Badge>
     );
   }
   if (stock <= LOW_STOCK_THRESHOLD) {
-    return <Badge tone="warning">{formatInt(stock)} · Low</Badge>;
+    return <Badge tone="warning">{formatInt(stock)} · Бага</Badge>;
   }
   return <span className="text-sm text-ink tabular-nums">{formatInt(stock)}</span>;
 }

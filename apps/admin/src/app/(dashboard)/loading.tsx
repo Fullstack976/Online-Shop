@@ -2,7 +2,7 @@
 export default function Loading() {
   return (
     <div className="animate-pulse" aria-busy="true" aria-live="polite">
-      <span className="sr-only">Loading…</span>
+      <span className="sr-only">Ачаалж байна…</span>
       <div className="mb-6 flex items-end justify-between gap-4">
         <div className="space-y-2">
           <div className="h-4 w-40 rounded bg-line" />

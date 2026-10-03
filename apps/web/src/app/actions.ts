@@ -1,7 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { getData } from "@/lib/data";
+import { isSupabaseConfigured } from "@shop/db/env";
+import { getData, getSessionData } from "@/lib/data";
+import { getUser } from "@/lib/supabase/server";
 
 export type FormState = { status: "idle" | "success" | "error"; message?: string; values?: Record<string, string> };
 
@@ -18,6 +20,7 @@ function translateCheckoutError(message: string): string {
     "Invalid quantity in cart.": "Сагсанд буруу тоо ширхэг байна.",
     "A product in your cart is no longer available.": "Таны сагсан дахь нэг бараа дууссан байна.",
     "Too many items in one order.": "Нэг захиалгад хэт олон бараа байна.",
+    "Please sign in to place an order.": "Захиалга өгөхийн тулд нэвтэрнэ үү.",
   };
   if (known[message]) return known[message];
   const stock = message.match(/^Only (\d+) left of (.+)\.$/);
@@ -48,9 +51,12 @@ export type CheckoutState = {
 
 export async function placeOrderAction(_prev: CheckoutState, formData: FormData): Promise<CheckoutState> {
   const field = (k: string) => String(formData.get(k) ?? "").trim();
+  const user = await getUser();
+  if (isSupabaseConfigured() && !user) redirect("/login?next=/checkout");
   const customer = {
     name: field("name"),
-    email: field("email"),
+    // Signed-in shoppers always order with their account email.
+    email: user?.email ?? field("email"),
     phone: field("phone"),
     address: field("address"),
     city: field("city"),
@@ -78,7 +84,7 @@ export async function placeOrderAction(_prev: CheckoutState, formData: FormData)
 
   let orderNumber: string;
   try {
-    ({ orderNumber } = await getData().placeOrder({ customer, items }));
+    ({ orderNumber } = await (await getSessionData()).placeOrder({ customer, items }));
   } catch (e) {
     return { error: translateCheckoutError(e instanceof Error ? e.message : ""), values: customer };
   }

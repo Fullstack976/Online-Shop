@@ -1,13 +1,13 @@
 "use server";
 
 import type { ProductInput } from "@shop/db";
-import { slugify } from "@shop/db/utils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { getData } from "@/lib/data";
 import { PRODUCT_IMAGES_BUCKET } from "@/lib/env";
 import { isHttpUrl } from "@/lib/images";
+import { makeSlug } from "@/lib/slug";
 import { getSupabase } from "@/lib/supabase/server";
 import { checkbox, errorMessage, parseNumber, round2, SLUG_PATTERN, text, UUID_PATTERN } from "@/lib/validation";
 
@@ -26,42 +26,42 @@ function parseProduct(formData: FormData): { input: ProductInput; errors: Produc
   const errors: NonNullable<ProductFormState["errors"]> = {};
 
   const name = text(formData, "name");
-  if (!name) errors.name = "Give the product a name.";
-  else if (name.length > 120) errors.name = "Keep the name under 120 characters.";
+  if (!name) errors.name = "Бүтээгдэхүүний нэрийг оруулна уу.";
+  else if (name.length > 120) errors.name = "Нэр 120 тэмдэгтээс хэтрэхгүй байх ёстой.";
 
   let slug = text(formData, "slug").toLowerCase();
-  if (!slug && name) slug = slugify(name);
-  if (!slug) errors.slug = "A URL slug is required.";
-  else if (!SLUG_PATTERN.test(slug)) errors.slug = "Use lowercase letters, numbers and single hyphens only.";
-  else if (slug.length > 140) errors.slug = "Keep the slug under 140 characters.";
+  if (!slug && name) slug = makeSlug(name);
+  if (!slug) errors.slug = "URL slug шаардлагатай.";
+  else if (!SLUG_PATTERN.test(slug)) errors.slug = "Зөвхөн латин жижиг үсэг, тоо, дан зураас (-) ашиглана уу.";
+  else if (slug.length > 140) errors.slug = "Slug 140 тэмдэгтээс хэтрэхгүй байх ёстой.";
 
   const description = text(formData, "description");
-  if (description.length > 5000) errors.description = "Keep the description under 5,000 characters.";
+  if (description.length > 5000) errors.description = "Тайлбар 5,000 тэмдэгтээс хэтрэхгүй байх ёстой.";
 
   const priceRaw = text(formData, "price");
   const price = parseNumber(priceRaw);
-  if (!priceRaw) errors.price = "Enter a price.";
-  else if (!Number.isFinite(price) || price < 0) errors.price = "Enter a valid price, e.g. 49.99.";
-  else if (price > MAX_PRICE) errors.price = "That price looks too high.";
+  if (!priceRaw) errors.price = "Үнэ оруулна уу.";
+  else if (!Number.isFinite(price) || price < 0) errors.price = "Зөв үнэ оруулна уу, жишээ нь 49.99.";
+  else if (price > MAX_PRICE) errors.price = "Үнэ хэт өндөр байна.";
 
   const compareRaw = text(formData, "compareAtPrice");
   let compareAtPrice: number | null = null;
   if (compareRaw) {
     const value = parseNumber(compareRaw);
-    if (!Number.isFinite(value) || value < 0) errors.compareAtPrice = "Enter a valid price or leave it empty.";
+    if (!Number.isFinite(value) || value < 0) errors.compareAtPrice = "Зөв үнэ оруулах эсвэл хоосон орхино уу.";
     else if (Number.isFinite(price) && value <= price)
-      errors.compareAtPrice = "Must be higher than the price to show a discount — or leave it empty.";
+      errors.compareAtPrice = "Хямдрал харуулахын тулд үнээс өндөр байх ёстой — эсвэл хоосон орхино уу.";
     else compareAtPrice = round2(value);
   }
 
   const categoryId = text(formData, "categoryId");
-  if (!categoryId) errors.categoryId = "Choose a category.";
+  if (!categoryId) errors.categoryId = "Ангилал сонгоно уу.";
 
   const stockRaw = text(formData, "stock");
   const stock = parseNumber(stockRaw);
-  if (!stockRaw) errors.stock = "Enter the stock on hand (0 if none).";
-  else if (!Number.isInteger(stock) || stock < 0) errors.stock = "Stock must be a whole number of 0 or more.";
-  else if (stock > 1_000_000) errors.stock = "That stock level looks too high.";
+  if (!stockRaw) errors.stock = "Нөөцийн тоог оруулна уу (байхгүй бол 0).";
+  else if (!Number.isInteger(stock) || stock < 0) errors.stock = "Нөөц 0 буюу түүнээс их бүхэл тоо байх ёстой.";
+  else if (stock > 1_000_000) errors.stock = "Нөөцийн тоо хэт их байна.";
 
   const images = [
     ...new Set(
@@ -72,8 +72,8 @@ function parseProduct(formData: FormData): { input: ProductInput; errors: Produc
     ),
   ];
   if (images.some((url) => !isHttpUrl(url) || url.length > 2048))
-    errors.images = "Every image must be a valid http(s) URL.";
-  else if (images.length > MAX_IMAGES) errors.images = `Add at most ${MAX_IMAGES} images.`;
+    errors.images = "Зураг бүр зөв http(s) холбоос байх ёстой.";
+  else if (images.length > MAX_IMAGES) errors.images = `Хамгийн ихдээ ${MAX_IMAGES} зураг нэмнэ үү.`;
 
   return {
     input: {
@@ -102,31 +102,31 @@ export async function saveProduct(
   } catch (error) {
     return { message: errorMessage(error) };
   }
-  if (id !== null && !UUID_PATTERN.test(id)) return { message: "Product not found." };
+  if (id !== null && !UUID_PATTERN.test(id)) return { message: "Бүтээгдэхүүн олдсонгүй." };
 
   const { input, errors } = parseProduct(formData);
-  if (errors) return { errors, message: "Please fix the highlighted fields." };
+  if (errors) return { errors, message: "Тэмдэглэсэн талбаруудыг засна уу." };
 
   const data = await getData();
   try {
     const categories = await data.listCategories();
     if (!categories.some((c) => c.id === input.categoryId)) {
       return {
-        errors: { categoryId: "That category no longer exists." },
-        message: "Please fix the highlighted fields.",
+        errors: { categoryId: "Энэ ангилал устгагдсан байна." },
+        message: "Тэмдэглэсэн талбаруудыг засна уу.",
       };
     }
     if (id) await data.updateProduct(id, input);
     else await data.createProduct(input);
   } catch (error) {
-    const message = errorMessage(error);
-    if (/slug/i.test(message)) {
+    const raw = error instanceof Error ? error.message : "";
+    if (/slug|already (exists|in use)/i.test(raw)) {
       return {
-        errors: { slug: "Another product already uses this slug." },
-        message: "Please fix the highlighted fields.",
+        errors: { slug: "Энэ slug-ийг өөр бүтээгдэхүүн ашиглаж байна." },
+        message: "Тэмдэглэсэн талбаруудыг засна уу.",
       };
     }
-    return { message };
+    return { message: errorMessage(error) };
   }
 
   revalidatePath("/products");
@@ -140,7 +140,7 @@ export type DeleteState = { error?: string };
 export async function deleteProduct(id: string): Promise<DeleteState> {
   try {
     await requireAdmin();
-    if (!UUID_PATTERN.test(id)) return { error: "Product not found." };
+    if (!UUID_PATTERN.test(id)) return { error: "Бүтээгдэхүүн олдсонгүй." };
     const data = await getData();
     await data.deleteProduct(id);
   } catch (error) {
@@ -171,13 +171,13 @@ export async function uploadProductImage(formData: FormData): Promise<UploadResu
   }
 
   const supabase = await getSupabase();
-  if (!supabase) return { error: "Uploads need Supabase. In demo mode, paste an image URL instead." };
+  if (!supabase) return { error: "Файл байршуулахад Supabase шаардлагатай. Демо горимд зургийн холбоос буулгана уу." };
 
   const file = formData.get("file");
-  if (!(file instanceof File) || file.size === 0) return { error: "Choose an image to upload." };
+  if (!(file instanceof File) || file.size === 0) return { error: "Байршуулах зургаа сонгоно уу." };
   const ext = ALLOWED_TYPES[file.type];
-  if (!ext) return { error: "Use a JPG, PNG, WebP, AVIF or GIF image." };
-  if (file.size > MAX_UPLOAD_BYTES) return { error: "Images must be 4 MB or smaller." };
+  if (!ext) return { error: "JPG, PNG, WebP, AVIF эсвэл GIF зураг ашиглана уу." };
+  if (file.size > MAX_UPLOAD_BYTES) return { error: "Зураг 4 МБ-аас ихгүй байх ёстой." };
 
   const path = `products/${new Date().toISOString().slice(0, 7)}/${crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage.from(PRODUCT_IMAGES_BUCKET).upload(path, file, {
@@ -185,7 +185,7 @@ export async function uploadProductImage(formData: FormData): Promise<UploadResu
     cacheControl: "31536000",
     upsert: false,
   });
-  if (error) return { error: `Upload failed: ${error.message}` };
+  if (error) return { error: `Байршуулж чадсангүй: ${error.message}` };
 
   const { data } = supabase.storage.from(PRODUCT_IMAGES_BUCKET).getPublicUrl(path);
   return { url: data.publicUrl };

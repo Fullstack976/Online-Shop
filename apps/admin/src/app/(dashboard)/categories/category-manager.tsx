@@ -1,6 +1,5 @@
 "use client";
 
-import { slugify } from "@shop/db/utils";
 import { CircleCheck, FolderPlus, LoaderCircle, Pencil, Plus, RefreshCw, Trash, TriangleAlert, X } from "lucide-react";
 import Link from "next/link";
 import { Fragment, useRef, useState, useTransition, type FormEvent } from "react";
@@ -12,6 +11,7 @@ import { Field, FormAlert, inputClass } from "@/components/ui/field";
 import { cn } from "@/lib/cn";
 import { formatInt } from "@/lib/format";
 import { isHttpUrl } from "@/lib/images";
+import { makeSlug } from "@/lib/slug";
 import { deleteCategory, saveCategory, type CategoryResult } from "./actions";
 
 export type CategoryRow = {
@@ -49,9 +49,9 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
       if (result.ok) {
         setConfirmId(null);
         if (editingId === category.id) setEditingId(null);
-        setFlash(`Deleted “${category.name}”.`);
+        setFlash(`“${category.name}” ангилал устгагдлаа.`);
       } else {
-        setRowError({ id: category.id, message: result.error ?? "Could not delete this category." });
+        setRowError({ id: category.id, message: result.error ?? "Ангиллыг устгаж чадсангүй." });
       }
     });
   }
@@ -70,7 +70,7 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
               type="button"
               onClick={() => setFlash(null)}
               className="inline-flex size-7 items-center justify-center rounded-md hover:bg-success/10"
-              aria-label="Dismiss"
+              aria-label="Хаах"
             >
               <X className="size-4" />
             </button>
@@ -79,11 +79,11 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
 
         <Card>
           <CardHeader
-            title="All categories"
-            description="Shown in this order in the storefront navigation."
+            title="Бүх ангилал"
+            description="Дэлгүүрийн цэсэнд энэ дарааллаар харагдана."
             action={
               <Button size="sm" onClick={() => startEdit(null)} className="lg:hidden">
-                <Plus aria-hidden /> New
+                <Plus aria-hidden /> Шинэ
               </Button>
             }
           />
@@ -93,19 +93,19 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
                 <thead>
                   <tr className="border-y border-line bg-page/60">
                     <th scope="col" className={th}>
-                      Category
+                      Ангилал
                     </th>
                     <th scope="col" className={th}>
                       Slug
                     </th>
                     <th scope="col" className={`${th} text-right`}>
-                      Products
+                      Бүтээгдэхүүн
                     </th>
                     <th scope="col" className={`${th} text-right`}>
-                      Order
+                      Дараалал
                     </th>
                     <th scope="col" className={th}>
-                      <span className="sr-only">Actions</span>
+                      <span className="sr-only">Үйлдэл</span>
                     </th>
                   </tr>
                 </thead>
@@ -140,7 +140,7 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
                                 size="icon"
                                 variant="ghost"
                                 onClick={() => startEdit(c.id)}
-                                aria-label={`Edit ${c.name}`}
+                                aria-label={`Засах: ${c.name}`}
                               >
                                 <Pencil />
                               </Button>
@@ -151,7 +151,7 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
                                   setRowError(null);
                                   setConfirmId(confirming ? null : c.id);
                                 }}
-                                aria-label={`Delete ${c.name}`}
+                                aria-label={`Устгах: ${c.name}`}
                                 aria-expanded={confirming}
                               >
                                 <Trash />
@@ -170,7 +170,8 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
                                   </p>
                                 ) : (
                                   <p className="text-sm text-ink">
-                                    Delete <span className="font-semibold">{c.name}</span>? This can&apos;t be undone.
+                                    <span className="font-semibold">“{c.name}”</span> ангиллыг устгах уу? Энэ үйлдлийг
+                                    буцаах боломжгүй.
                                   </p>
                                 )}
                                 <div className="flex shrink-0 gap-2">
@@ -180,7 +181,7 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
                                     onClick={() => setConfirmId(null)}
                                     disabled={deleting}
                                   >
-                                    Cancel
+                                    Болих
                                   </Button>
                                   {!error ? (
                                     <Button
@@ -195,14 +196,14 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
                                       ) : (
                                         <Trash aria-hidden />
                                       )}
-                                      {deleting ? "Deleting…" : "Yes, delete"}
+                                      {deleting ? "Устгаж байна…" : "Тийм, устгах"}
                                     </Button>
                                   ) : c.productCount ? (
                                     <Link
                                       href={`/products?category=${c.slug}`}
                                       className="inline-flex h-8 items-center rounded-lg px-3 text-xs font-semibold text-navy hover:bg-white"
                                     >
-                                      View its products
+                                      Бүтээгдэхүүнийг харах
                                     </Link>
                                   ) : null}
                                 </div>
@@ -217,8 +218,8 @@ export function CategoryManager({ categories }: { categories: CategoryRow[] }) {
               </table>
             </TableScroll>
           ) : (
-            <EmptyState icon={<FolderPlus />} title="No categories yet">
-              Create your first category to start organising products.
+            <EmptyState icon={<FolderPlus />} title="Ангилал алга байна">
+              Бүтээгдэхүүнээ ангилахын тулд анхны ангиллаа үүсгэнэ үү.
             </EmptyState>
           )}
         </Card>
@@ -266,7 +267,7 @@ function CategoryEditor({
     startTransition(async () => {
       const res = await saveCategory(formData);
       if (res.ok) {
-        onSaved(res.message ?? "Saved.");
+        onSaved(res.message ?? "Хадгалагдлаа.");
         if (!category) {
           // Stay in "new" mode, ready for the next one.
           setName("");
@@ -285,14 +286,14 @@ function CategoryEditor({
   return (
     <Card>
       <CardHeader
-        title={category ? "Edit category" : "New category"}
-        description={category ? `Editing “${category.name}”` : "Add a department to the storefront."}
+        title={category ? "Ангилал засах" : "Шинэ ангилал"}
+        description={category ? `Засаж буй: “${category.name}”` : "Дэлгүүрт шинэ ангилал нэмэх."}
       />
       <form onSubmit={submit} noValidate className="space-y-4 p-5">
         {category ? <input type="hidden" name="id" value={category.id} /> : null}
         {result.error ? <FormAlert>{result.error}</FormAlert> : null}
 
-        <Field label="Name" htmlFor="category-name" error={errors.name}>
+        <Field label="Нэр" htmlFor="category-name" error={errors.name}>
           <input
             id="category-name"
             name="name"
@@ -300,9 +301,9 @@ function CategoryEditor({
             onChange={(e) => {
               const value = e.currentTarget.value;
               setName(value);
-              if (!slugTouched) setSlug(slugify(value));
+              if (!slugTouched) setSlug(makeSlug(value));
             }}
-            placeholder="e.g. Home & Living"
+            placeholder="Жишээ нь: Гэр ахуй"
             maxLength={60}
             aria-invalid={Boolean(errors.name)}
             aria-describedby={errors.name ? "category-name-error" : undefined}
@@ -320,14 +321,14 @@ function CategoryEditor({
                 type="button"
                 className="inline-flex items-center gap-1 font-medium text-tan-600 hover:text-navy"
                 onClick={() => {
-                  setSlug(slugify(name));
+                  setSlug(makeSlug(name));
                   setSlugTouched(false);
                 }}
               >
-                <RefreshCw className="size-3" aria-hidden /> Generate from name
+                <RefreshCw className="size-3" aria-hidden /> Нэрнээс үүсгэх
               </button>
             ) : (
-              "Generated from the name until you edit it."
+              "Та засах хүртэл нэрнээс автоматаар үүснэ."
             )
           }
         >
@@ -339,14 +340,14 @@ function CategoryEditor({
               setSlug(e.currentTarget.value.toLowerCase().replace(/\s+/g, "-"));
               setSlugTouched(true);
             }}
-            placeholder="home-living"
+            placeholder="ger-akhui"
             aria-invalid={Boolean(errors.slug)}
             aria-describedby={errors.slug ? "category-slug-error" : undefined}
             className={inputClass}
           />
         </Field>
 
-        <Field label="Image URL" htmlFor="category-image" error={errors.imageUrl} optional>
+        <Field label="Зургийн холбоос" htmlFor="category-image" error={errors.imageUrl} optional>
           <div className="flex items-center gap-3">
             <Thumb src={isHttpUrl(imageUrl) ? imageUrl : null} alt="" size={42} />
             <input
@@ -364,7 +365,7 @@ function CategoryEditor({
           </div>
         </Field>
 
-        <Field label="Sort order" htmlFor="category-sort" error={errors.sortOrder} hint="Lower numbers appear first.">
+        <Field label="Дараалал" htmlFor="category-sort" error={errors.sortOrder} hint="Бага тоотой нь эхэнд харагдана.">
           <input
             id="category-sort"
             name="sortOrder"
@@ -380,12 +381,12 @@ function CategoryEditor({
         <div className="flex items-center justify-end gap-2 border-t border-line pt-4">
           {category ? (
             <Button variant="ghost" onClick={onCancel} disabled={pending}>
-              Cancel
+              Болих
             </Button>
           ) : null}
           <Button type="submit" disabled={pending}>
             {pending ? <LoaderCircle className="animate-spin" aria-hidden /> : null}
-            {pending ? "Saving…" : category ? "Save changes" : "Create category"}
+            {pending ? "Хадгалж байна…" : category ? "Өөрчлөлт хадгалах" : "Ангилал үүсгэх"}
           </Button>
         </div>
       </form>

@@ -1,11 +1,11 @@
 import { LayoutDashboard, Package, ReceiptText, Tags, Users } from "lucide-react";
 
 export const NAV_ITEMS = [
-  { href: "/", label: "Dashboard", Icon: LayoutDashboard },
-  { href: "/products", label: "Products", Icon: Package },
-  { href: "/orders", label: "Orders", Icon: ReceiptText },
-  { href: "/customers", label: "Customers", Icon: Users },
-  { href: "/categories", label: "Categories", Icon: Tags },
+  { href: "/", label: "Хянах самбар", Icon: LayoutDashboard },
+  { href: "/products", label: "Бүтээгдэхүүн", Icon: Package },
+  { href: "/orders", label: "Захиалга", Icon: ReceiptText },
+  { href: "/customers", label: "Үйлчлүүлэгчид", Icon: Users },
+  { href: "/categories", label: "Ангилал", Icon: Tags },
 ] as const;
 
 export function isActive(pathname: string, href: string) {
@@ -17,19 +17,19 @@ export function titleForPath(pathname: string): { title: string; parent?: { href
   const [section, sub] = pathname.split("/").filter(Boolean);
   switch (section) {
     case undefined:
-      return { title: "Dashboard" };
+      return { title: "Хянах самбар" };
     case "products":
-      if (sub === "new") return { title: "New product", parent: { href: "/products", label: "Products" } };
-      if (sub) return { title: "Edit product", parent: { href: "/products", label: "Products" } };
-      return { title: "Products" };
+      if (sub === "new") return { title: "Шинэ бүтээгдэхүүн", parent: { href: "/products", label: "Бүтээгдэхүүн" } };
+      if (sub) return { title: "Бүтээгдэхүүн засах", parent: { href: "/products", label: "Бүтээгдэхүүн" } };
+      return { title: "Бүтээгдэхүүн" };
     case "orders":
-      if (sub) return { title: "Order details", parent: { href: "/orders", label: "Orders" } };
-      return { title: "Orders" };
+      if (sub) return { title: "Захиалгын дэлгэрэнгүй", parent: { href: "/orders", label: "Захиалга" } };
+      return { title: "Захиалга" };
     case "customers":
-      return { title: "Customers" };
+      return { title: "Үйлчлүүлэгчид" };
     case "categories":
-      return { title: "Categories" };
+      return { title: "Ангилал" };
     default:
-      return { title: "Page not found" };
+      return { title: "Хуудас олдсонгүй" };
   }
 }

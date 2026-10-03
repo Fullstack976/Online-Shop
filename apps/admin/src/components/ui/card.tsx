@@ -28,7 +28,7 @@ export function CardHeader({
 }) {
   return (
     <header className={cn("flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-5 pt-5", className)}>
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1">
         <h2 id={id} className="font-display text-[15px] font-bold tracking-tight text-ink">
           {title}
         </h2>
