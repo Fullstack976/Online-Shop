@@ -6,6 +6,13 @@ npm workspaces + Turborepo ашигласан monorepo. Өгөгдөл нь Supa
 Supabase-ийн env хоосон үед хоёр апп хоёулаа **mock data**-аар ажиллана (50 бараа, 7 ангилал,
 26 харилцагч, сүүлийн 60 хоногийн 96 захиалга). Env-ээ нэмэнгүүт Supabase руу шууд шилжинэ.
 
+**Live (Vercel, team tsstark-academy):**
+- Дэлгүүр: https://online-shop-rho-inky.vercel.app
+- Admin: https://online-shop-admin-pi.vercel.app
+
+`main` салбар руу push хийх бүрт хоёр апп автоматаар deploy хийгдэнэ. Supabase-ийн env-үүдийг
+Supabase ↔ Vercel integration автоматаар синк хийдэг.
+
 ```
 Online-Shop/
 ├─ apps/
