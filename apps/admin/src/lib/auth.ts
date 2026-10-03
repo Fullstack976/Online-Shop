@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { isAllowedAdminEmail } from "@/lib/env";
 import { getSupabase } from "@/lib/supabase/server";
 
 export type Viewer =
@@ -31,7 +32,8 @@ async function loadViewer(): Promise<Viewer> {
     mode: "supabase",
     user: { id: data.user.id, email, name },
     role,
-    isAdmin: role === "admin",
+    // Both the database role and the email allow-list must agree.
+    isAdmin: role === "admin" && isAllowedAdminEmail(email),
   };
 }
 

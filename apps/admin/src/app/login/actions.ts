@@ -3,6 +3,7 @@
 import type { AuthError } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { isAllowedAdminEmail } from "@/lib/env";
 import { getSupabase } from "@/lib/supabase/server";
 
 export type SignInState = {
@@ -31,6 +32,7 @@ const MSG = {
   offline:
     "Supabase-тэй холбогдож чадсангүй. NEXT_PUBLIC_SUPABASE_URL болон интернэт холболтоо шалгаад дахин оролдоно уу.",
   rateLimited: "Хэт олон удаа оролдлоо. Хэдэн минут хүлээгээд дахин оролдоно уу.",
+  notAllowed: "Энэ имэйлээр админ самбар руу нэвтрэх эрхгүй.",
   resetSent:
     "Хэрэв энэ имэйлээр бүртгэл байгаа бол нууц үг тохируулах холбоос илгээгдлээ. Ирсэн мэйлээ (spam хавтсыг оролцуулан) шалгана уу.",
 };
@@ -67,6 +69,8 @@ export async function signIn(_prev: SignInState, formData: FormData): Promise<Si
 
   const supabase = await getSupabase();
   if (!supabase) return { email, error: MSG.demo };
+  // Only the allow-listed owner account may sign in here.
+  if (!isAllowedAdminEmail(email)) return { email, error: MSG.notAllowed };
 
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
@@ -109,6 +113,8 @@ export async function requestPasswordReset(_prev: ResetState, formData: FormData
 
   const supabase = await getSupabase();
   if (!supabase) return { email, error: MSG.demo };
+  // Same neutral reply, but never email anyone outside the allow-list.
+  if (!isAllowedAdminEmail(email)) return { ok: true, email, message: MSG.resetSent };
 
   const redirectTo = `${await appOrigin()}/auth/set-password`;
   const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
