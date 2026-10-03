@@ -59,7 +59,7 @@ const perks = [
 
 function Collage() {
   return (
-    <div className="relative mx-auto aspect-[5/4] w-full max-w-[560px]">
+    <div className="relative mx-auto aspect-[5/4] w-full max-w-[340px] sm:max-w-[560px]">
       <div className="absolute inset-[6%_4%_4%_22%] overflow-hidden rounded-[28px] bg-white shadow-xl shadow-navy/10">
         <Image
           src={siteImage("hero-backpack")}
@@ -111,37 +111,37 @@ export function HeroSlider() {
       onMouseLeave={() => setPaused(false)}
     >
       <div className="pointer-events-none absolute -right-32 -top-32 size-[520px] rounded-full bg-white/50" aria-hidden />
-      <div className="container-page relative grid items-center gap-10 py-12 lg:min-h-[520px] lg:grid-cols-[1fr_1.05fr] lg:py-14">
+      <div className="container-page relative grid items-center gap-8 pb-12 pt-8 sm:gap-10 sm:py-12 lg:min-h-[520px] lg:grid-cols-[1fr_1.05fr] lg:py-14">
         <div key={`text-${index}`} className="animate-fade-in relative z-10 lg:pl-8">
           <p className="label-caps text-tan">{slide.eyebrow}</p>
-          <h1 className="mt-4 font-display text-[40px] font-extrabold uppercase leading-[1.02] tracking-tight text-navy sm:text-6xl lg:text-[64px]">
+          <h1 className="mt-3 font-display text-[36px] font-extrabold uppercase leading-[1.02] tracking-tight text-navy sm:text-6xl lg:text-[64px]">
             {slide.title[0]}
             <br />
             {slide.title[1]}
           </h1>
-          <p className="mt-3 font-script text-3xl text-tan sm:text-4xl">{slide.script}</p>
-          <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-ink/75">{slide.body}</p>
-          <div className="mt-7 flex flex-wrap gap-3">
+          <p className="mt-2 font-script text-[28px] font-semibold text-tan sm:mt-3 sm:text-4xl">{slide.script}</p>
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink/75 sm:mt-5 sm:text-[15px]">{slide.body}</p>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:mt-7 sm:flex sm:flex-wrap">
             <Link
               href={slide.primary.href}
-              className="label-caps inline-flex h-12 items-center gap-2 rounded-md bg-navy px-6 text-white transition hover:bg-navy-700"
+              className="label-caps inline-flex h-12 items-center justify-center gap-2 rounded-md bg-navy px-3 text-[11px] text-white transition hover:bg-navy-700 sm:px-6 sm:text-xs"
             >
               {slide.primary.label} <ArrowRight className="size-4" aria-hidden />
             </Link>
             <Link
               href={slide.secondary.href}
-              className="label-caps inline-flex h-12 items-center rounded-md border border-navy/80 bg-white/40 px-6 text-navy transition hover:bg-navy hover:text-white"
+              className="label-caps inline-flex h-12 items-center justify-center rounded-md border border-navy/80 bg-white/40 px-3 text-[11px] text-navy transition hover:bg-navy hover:text-white sm:px-6 sm:text-xs"
             >
               {slide.secondary.label}
             </Link>
           </div>
-          <ul className="mt-10 grid max-w-lg grid-cols-1 gap-4 sm:grid-cols-3">
+          <ul className="mt-7 grid max-w-lg grid-cols-3 gap-2 sm:mt-10 sm:gap-4">
             {perks.map(({ icon: Icon, title, text }) => (
-              <li key={title} className="flex items-center gap-3">
+              <li key={title} className="flex flex-col items-center gap-1.5 text-center sm:flex-row sm:gap-3 sm:text-left">
                 <Icon className="size-6 shrink-0 text-navy" strokeWidth={1.5} aria-hidden />
                 <span>
-                  <span className="label-caps block text-[10.5px] text-navy">{title}</span>
-                  <span className="block text-xs text-muted">{text}</span>
+                  <span className="label-caps block text-[9.5px] text-navy sm:text-[10.5px]">{title}</span>
+                  <span className="block text-[11px] leading-snug text-muted sm:text-xs">{text}</span>
                 </span>
               </li>
             ))}
@@ -152,14 +152,14 @@ export function HeroSlider() {
           {slide.art === "collage" ? (
             <Collage />
           ) : (
-            <div className="relative mx-auto aspect-[5/4] w-full max-w-[560px] overflow-hidden rounded-[28px] shadow-xl shadow-navy/10">
+            <div className="relative mx-auto aspect-[5/4] w-full max-w-[340px] overflow-hidden rounded-[28px] shadow-xl shadow-navy/10 sm:max-w-[560px]">
               <Image src={slide.art.src} alt={slide.art.alt} fill sizes="(min-width: 1024px) 560px, 90vw" className="object-cover" />
             </div>
           )}
-          <div className="absolute right-[4%] top-0 grid size-24 place-items-center rounded-full bg-navy text-center text-white shadow-lg sm:size-28 lg:right-[10%]">
+          <div className="absolute right-[2%] top-0 grid size-20 place-items-center rounded-full bg-navy text-center text-white shadow-lg sm:right-[4%] sm:size-28 lg:right-[10%]">
             <div className="leading-none">
               <span className="label-caps block text-[10px]">{slide.badge.top}</span>
-              <span className="block font-display text-3xl font-extrabold text-tan sm:text-[34px]">{slide.badge.big}</span>
+              <span className="block font-display text-2xl font-extrabold text-tan sm:text-[34px]">{slide.badge.big}</span>
               <span className="label-caps block text-[10px]">{slide.badge.bottom}</span>
             </div>
           </div>

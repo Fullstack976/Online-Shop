@@ -75,3 +75,10 @@
     display: none;
   }
 }
+
+/* On phones, product pages also show a buy bar above the tab bar: keep the footer clear of both. */
+@media (width < 64rem) {
+  body:has([data-mobile-buybar]) {
+    padding-bottom: calc(4rem + 68px + env(safe-area-inset-bottom));
+  }
+}

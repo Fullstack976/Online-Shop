@@ -5,6 +5,7 @@ import { CreditCard, PackageCheck, RotateCcw, Truck } from "lucide-react";
 import { discountPercent, formatPrice } from "@shop/db/utils";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ProductGallery } from "@/components/product/ProductGallery";
+import { MobileBuyBar } from "@/components/product/MobileBuyBar";
 import { ProductPurchase } from "@/components/product/ProductPurchase";
 import { StarRating } from "@/components/product/StarRating";
 import { Price } from "@/components/product/Price";
@@ -39,6 +40,14 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
     ? (await data.listProducts({ categorySlug: product.category.slug, limit: 6 })).filter((p) => p.id !== product.id).slice(0, 5)
     : [];
   const discount = discountPercent(product.price, product.compareAtPrice);
+  const cartProduct = {
+    productId: product.id,
+    slug: product.slug,
+    name: product.name,
+    price: product.price,
+    image: product.images[0] ?? null,
+    stock: product.stock,
+  };
 
   return (
     <>
@@ -87,16 +96,7 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
             </p>
 
             <div className="mt-6">
-              <ProductPurchase
-                product={{
-                  productId: product.id,
-                  slug: product.slug,
-                  name: product.name,
-                  price: product.price,
-                  image: product.images[0] ?? null,
-                  stock: product.stock,
-                }}
-              />
+              <ProductPurchase product={cartProduct} />
             </div>
 
             <ul className="mt-8 grid gap-4 rounded-xl bg-cloud p-5 sm:grid-cols-2">
@@ -118,6 +118,8 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
           </div>
         </div>
       </div>
+
+      <MobileBuyBar product={cartProduct} compareAtPrice={product.compareAtPrice} />
 
       {related.length > 0 && (
         <section className="container-page pb-16">

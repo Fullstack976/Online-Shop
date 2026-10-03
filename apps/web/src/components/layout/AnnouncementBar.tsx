@@ -4,9 +4,12 @@ import { ArrowRight } from "lucide-react";
 export function AnnouncementBar() {
   return (
     <div className="bg-navy text-white">
-      <div className="container-page flex h-10 items-center justify-center gap-3 text-center sm:justify-between">
+      <div className="container-page flex h-9 items-center justify-center gap-3 text-center sm:h-10 sm:justify-between">
         <p className="label-caps truncate text-[11px] sm:text-xs">
-          $50-аас дээш захиалгад хүргэлт үнэгүй <span className="text-tan">·</span> 30 хоногийн буцаалт
+          <span className="sm:hidden">$50+ захиалгад хүргэлт үнэгүй</span>
+          <span className="hidden sm:inline">
+            $50-аас дээш захиалгад хүргэлт үнэгүй <span className="text-tan">·</span> 30 хоногийн буцаалт
+          </span>
         </p>
         <Link
           href="/shop?sale=1"

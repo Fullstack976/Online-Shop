@@ -26,6 +26,8 @@ const columns = [
   },
   {
     title: "Миний бүртгэл",
+    // Covered by the mobile tab bar, so phones skip this column.
+    hideOnMobile: true,
     links: [
       { label: "Миний бүртгэл", href: "/account" },
       { label: "Захиалгын түүх", href: "/account" },
@@ -41,13 +43,13 @@ const payments = ["VISA", "Mastercard", "PayPal", "Apple Pay", "G Pay"];
 export function Footer() {
   return (
     <footer className="mt-auto bg-navy text-white">
-      <div className="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.3fr]">
-        <div className="max-w-xs">
+      <div className="container-page grid grid-cols-2 gap-x-6 gap-y-10 py-10 sm:py-14 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.3fr]">
+        <div className="col-span-2 max-w-xs lg:col-span-1">
           <Logo inverted />
           <p className="mt-5 text-sm leading-relaxed text-white/65">{site.description}</p>
         </div>
         {columns.map((col) => (
-          <div key={col.title}>
+          <div key={col.title} className={"hideOnMobile" in col ? "hidden sm:block" : undefined}>
             <h3 className="label-caps text-white">{col.title}</h3>
             <ul className="mt-4 space-y-2.5">
               {col.links.map((l) => (
@@ -60,7 +62,7 @@ export function Footer() {
             </ul>
           </div>
         ))}
-        <div>
+        <div className="col-span-2 sm:col-span-1">
           <h3 className="label-caps text-white">Холбоо барих</h3>
           <ul className="mt-4 space-y-3 text-sm text-white/65">
             <li className="flex gap-3">

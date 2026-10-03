@@ -17,7 +17,7 @@ export function Logo({ inverted = false, className }: { inverted?: boolean; clas
       <span className="leading-none">
         <span
           className={cn(
-            "block font-display text-xl font-extrabold tracking-[0.04em]",
+            "block whitespace-nowrap font-display text-xl font-extrabold tracking-[0.04em]",
             inverted ? "text-white" : "text-navy",
           )}
         >
@@ -25,7 +25,7 @@ export function Logo({ inverted = false, className }: { inverted?: boolean; clas
         </span>
         <span
           className={cn(
-            "mt-1 block font-display text-[8.5px] font-semibold uppercase tracking-[0.28em]",
+            "mt-1 block whitespace-nowrap font-display text-[8.5px] font-semibold uppercase tracking-[0.28em]",
             inverted ? "text-white/60" : "text-muted",
           )}
         >

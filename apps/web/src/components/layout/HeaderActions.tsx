@@ -39,19 +39,19 @@ export function HeaderActions() {
       </button>
       <Link
         href="/account"
-        className="hidden size-10 place-items-center rounded-full text-navy transition hover:bg-cloud sm:grid"
+        className="hidden size-10 place-items-center rounded-full text-navy transition hover:bg-cloud lg:grid"
         aria-label="Миний бүртгэл"
       >
         <User className="size-5" strokeWidth={1.8} />
       </Link>
-      <Link href="/cart" className="flex items-center gap-2 rounded-full py-1 pl-1 pr-1 text-navy transition hover:bg-cloud sm:pr-3" aria-label={`Сагс, ${count} бараа`}>
+      <Link href="/cart" className="hidden items-center gap-2 rounded-full py-1 pl-1 pr-3 text-navy transition hover:bg-cloud lg:flex" aria-label={`Сагс, ${count} бараа`}>
         <span className="relative grid size-9 place-items-center">
           <ShoppingCart className="size-5" strokeWidth={1.8} />
           <span className="absolute -right-0.5 -top-0.5 grid min-w-[18px] place-items-center rounded-full bg-navy px-1 text-[10px] font-bold leading-[18px] text-white">
             {count}
           </span>
         </span>
-        <span className="hidden font-display text-sm font-semibold tabular-nums sm:inline">{formatPrice(total)}</span>
+        <span className="font-display text-sm font-semibold tabular-nums">{formatPrice(total)}</span>
       </Link>
 
       {searchOpen && (
