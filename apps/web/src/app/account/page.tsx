@@ -40,7 +40,13 @@ export default async function AccountPage() {
 
   const meta = (user.user_metadata ?? {}) as { full_name?: string; name?: string; avatar_url?: string };
   const name = meta.full_name || meta.name || user.email?.split("@")[0] || "Хэрэглэгч";
-  const orders = await (await getSessionData()).listOrders({ userId: user.id });
+  let orders: Awaited<ReturnType<Awaited<ReturnType<typeof getSessionData>>["listOrders"]>> = [];
+  let loadFailed = false;
+  try {
+    orders = await (await getSessionData()).listOrders({ userId: user.id });
+  } catch {
+    loadFailed = true;
+  }
 
   return (
     <>
@@ -82,7 +88,12 @@ export default async function AccountPage() {
 
         <section>
           <h2 className="font-display text-lg font-extrabold uppercase tracking-wide text-navy">Миний захиалгууд</h2>
-          {orders.length === 0 ? (
+          {loadFailed && (
+            <p className="mt-4 rounded-md bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              Захиалгын түүхийг одоогоор ачаалж чадсангүй. Түр хүлээгээд дахин оролдоно уу.
+            </p>
+          )}
+          {orders.length === 0 && !loadFailed ? (
             <div className="mt-4 rounded-2xl border border-dashed border-line px-6 py-14 text-center">
               <Package className="mx-auto size-10 text-tan" strokeWidth={1.4} aria-hidden />
               <p className="mt-4 font-display font-bold text-navy">Танд одоогоор захиалга алга</p>
