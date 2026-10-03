@@ -19,7 +19,8 @@ if (!url || !secret) {
   console.error("Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SECRET_KEY in .env");
   process.exit(1);
 }
-if (!email || !email.includes("@")) {
+if (!email || !/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(email)) {
+  console.error(`"${email ?? ""}" is not a valid email address (Latin letters only).`);
   console.error("Usage: npm run db:invite-admin -- someone@example.com");
   process.exit(1);
 }
